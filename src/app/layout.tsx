@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -9,8 +11,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Tirzepatide — MyoGenix Pharma",
-  description: "Configure your GLP-1 program",
+  title: "MyoGenix Pharma — Clinical GLP-1 Programs",
+  description: "Provider-reviewed compounded semaglutide and tirzepatide, configured for your protocol.",
 };
 
 export default function RootLayout({
@@ -20,8 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white font-[family-name:var(--font-poppins)]">
-        {children}
+      <body className="flex min-h-full flex-col bg-white font-[family-name:var(--font-poppins)]">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );

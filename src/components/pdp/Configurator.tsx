@@ -1,32 +1,40 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import type { Medicine, PurchaseType, MonthDoseSelection } from "@/lib/pdp-types";
 import { MEDICINE_CONFIG, buildDefaultSelections } from "@/lib/pdp-config";
-import { MedicineToggle } from "./MedicineToggle";
 import { MonthSelector } from "./MonthSelector";
 import { DosePicker } from "./DosePicker";
 import { PurchaseTypeToggle } from "./PurchaseTypeToggle";
 import { OrderSummary } from "./OrderSummary";
 import { ProductHero } from "./ProductHero";
 
-export function Configurator() {
-  const [medicine, setMedicine] = useState<Medicine>("tirzepatide");
+interface Props {
+  defaultMedicine?: Medicine;
+}
+
+const COMPARE_HREF: Record<Medicine, string> = {
+  tirzepatide: "/weight-management/semaglutide",
+  semaglutide: "/weight-management/tirzepatide",
+};
+
+const COMPARE_LABEL: Record<Medicine, string> = {
+  tirzepatide: "Compare with Semaglutide →",
+  semaglutide: "Compare with Tirzepatide →",
+};
+
+export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("subscription");
   const [monthCount, setMonthCount] = useState<1 | 2 | 3>(1);
   const [selections, setSelections] = useState<MonthDoseSelection[]>(() =>
-    buildDefaultSelections(MEDICINE_CONFIG["tirzepatide"], 1)
+    buildDefaultSelections(MEDICINE_CONFIG[defaultMedicine], 1)
   );
-
-  const handleMedicineChange = useCallback((med: Medicine) => {
-    setMedicine(med);
-    setSelections(buildDefaultSelections(MEDICINE_CONFIG[med], monthCount));
-  }, [monthCount]);
 
   const handleMonthCountChange = useCallback((months: 1 | 2 | 3) => {
     setMonthCount(months);
     setSelections((prev) => {
-      const config = MEDICINE_CONFIG[medicine];
+      const config = MEDICINE_CONFIG[defaultMedicine];
       if (months <= prev.length) {
         return prev.slice(0, months);
       }
@@ -37,7 +45,7 @@ export function Configurator() {
         ...extra.map((e, i) => ({ month: prev.length + 1 + i, mg: e.mg })),
       ];
     });
-  }, [medicine]);
+  }, [defaultMedicine]);
 
   const handleDoseChange = useCallback((month: number, mg: number) => {
     setSelections((prev) =>
@@ -45,15 +53,15 @@ export function Configurator() {
     );
   }, []);
 
-  const config = MEDICINE_CONFIG[medicine];
+  const config = MEDICINE_CONFIG[defaultMedicine];
 
   return (
     <section id="configure" className="bg-white px-4 py-16">
       <div className="mx-auto max-w-5xl">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-          {/* Left: Hero + visual */}
+          {/* Left: Hero + visual + trust */}
           <div className="flex flex-col gap-8">
-            <ProductHero medicine={medicine} />
+            <ProductHero medicine={defaultMedicine} />
 
             {/* Product visual */}
             <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50">
@@ -98,11 +106,18 @@ export function Configurator() {
                 </div>
               ))}
             </div>
+
+            {/* Compare link */}
+            <Link
+              href={COMPARE_HREF[defaultMedicine]}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline underline-offset-2 hover:text-black"
+            >
+              {COMPARE_LABEL[defaultMedicine]}
+            </Link>
           </div>
 
           {/* Right: Configurator */}
           <div className="flex flex-col gap-6">
-            <MedicineToggle value={medicine} onChange={handleMedicineChange} />
             <PurchaseTypeToggle
               value={purchaseType}
               onChange={setPurchaseType}
@@ -117,7 +132,7 @@ export function Configurator() {
               <div className="flex flex-col gap-3">
                 {selections.map((sel, i) => (
                   <DosePicker
-                    key={`${medicine}-month-${sel.month}`}
+                    key={`${defaultMedicine}-month-${sel.month}`}
                     month={sel.month}
                     selectedMg={sel.mg}
                     prevMonthMg={i === 0 ? null : selections[i - 1].mg}
@@ -129,7 +144,7 @@ export function Configurator() {
             </div>
 
             <OrderSummary
-              medicine={medicine}
+              medicine={defaultMedicine}
               purchaseType={purchaseType}
               selections={selections}
             />
