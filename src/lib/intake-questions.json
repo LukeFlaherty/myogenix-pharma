@@ -1,0 +1,208 @@
+{
+  "tirzepatide": {
+    "steps": [
+      {
+        "id": "personal",
+        "label": "Personal",
+        "component": "personal",
+        "title": "Personal information",
+        "subtitle": "Used to create your patient record and verify your identity with our licensed provider team."
+      },
+      {
+        "id": "metrics",
+        "label": "Metrics",
+        "component": "metrics",
+        "title": "Body metrics & goals",
+        "subtitle": "Your provider uses this to evaluate clinical appropriateness and set your initial dosing baseline.",
+        "bmiNote": "A BMI ≥ 27 with at least one weight-related comorbidity (hypertension, type 2 diabetes, dyslipidemia, etc.), or a BMI ≥ 30, is the standard eligibility threshold for tirzepatide therapy."
+      },
+      {
+        "id": "medical_history",
+        "label": "History",
+        "component": "conditions",
+        "title": "Medical history",
+        "subtitle": "Select all conditions that currently apply or that you have a history of. Your provider reviews this before approving your order.",
+        "contraindications": [
+          {
+            "key": "thyroid_cancer",
+            "warning": "Tirzepatide carries an FDA black-box warning for thyroid C-cell tumors (medullary thyroid carcinoma / MEN2 syndrome). A personal or family history of MTC or MEN2 is a contraindication. Your provider will review your intake and may not be able to approve this order."
+          },
+          {
+            "key": "pancreatitis",
+            "warning": "A history of acute or chronic pancreatitis requires close provider review. Tirzepatide may be contraindicated depending on the severity and recency of your history."
+          },
+          {
+            "key": "kidney_disease",
+            "warning": "Moderate-to-severe chronic kidney disease requires provider review before tirzepatide can be prescribed. Dosing adjustments may be necessary."
+          }
+        ]
+      },
+      {
+        "id": "medications",
+        "label": "Medications",
+        "component": "medications",
+        "title": "Current medications & allergies",
+        "subtitle": "Include all prescription medications, OTC drugs, and supplements. This helps your provider identify interactions before approving your order.",
+        "commonInteractions": [
+          "Insulin or insulin secretagogues — combined use increases hypoglycemia risk",
+          "Warfarin / blood thinners — INR should be monitored after starting tirzepatide",
+          "Oral contraceptives — tirzepatide may delay oral absorption; backup contraception recommended for 4 weeks after each dose escalation",
+          "Thyroid medications (levothyroxine) — changes in weight can affect thyroid dosing"
+        ]
+      },
+      {
+        "id": "glp1_history",
+        "label": "GLP-1",
+        "component": "glp1_history",
+        "title": "GLP-1 / GIP agonist history",
+        "subtitle": "If you've used tirzepatide or any GLP-1 medication before, your provider needs this to calibrate your starting dose and avoid re-titration side effects.",
+        "priorMedicineOptions": [
+          { "value": "tirzepatide_mounjaro", "label": "Tirzepatide — Mounjaro (brand)" },
+          { "value": "tirzepatide_zepbound", "label": "Tirzepatide — Zepbound (brand)" },
+          { "value": "tirzepatide_compounded", "label": "Compounded Tirzepatide" },
+          { "value": "semaglutide_ozempic", "label": "Semaglutide — Ozempic (brand)" },
+          { "value": "semaglutide_wegovy", "label": "Semaglutide — Wegovy (brand)" },
+          { "value": "compounded_sema", "label": "Compounded Semaglutide" },
+          { "value": "liraglutide", "label": "Liraglutide — Victoza / Saxenda" },
+          { "value": "other", "label": "Other GLP-1 medication" }
+        ],
+        "returningPatientNote": "Returning tirzepatide patients resuming at a dose above 2.5 mg/week may need recent bloodwork (HbA1c, CMP, lipid panel). Your provider will request this during review if applicable."
+      },
+      {
+        "id": "lifestyle",
+        "label": "Lifestyle",
+        "component": "lifestyle",
+        "title": "Lifestyle",
+        "subtitle": "Context that helps your provider set realistic expectations, monitor progress, and personalise your care plan."
+      },
+      {
+        "id": "review",
+        "label": "Review",
+        "component": "review",
+        "title": "Review & consent",
+        "subtitle": "Confirm your answers are accurate before submitting your intake to our provider team.",
+        "consents": [
+          {
+            "key": "consentClinicalReview",
+            "label": "I understand my order is subject to clinical review and may be modified or denied by a licensed provider."
+          },
+          {
+            "key": "consentNotReplacement",
+            "label": "I understand this service does not replace an in-person physician relationship and is not a substitute for emergency medical care."
+          },
+          {
+            "key": "consentProviderAdjust",
+            "label": "I understand my provider may adjust my tirzepatide dose based on my medical history, even if it differs from what I configured."
+          },
+          {
+            "key": "consentCancellation",
+            "label": "I have read and agree to the cancellation and refund policy."
+          }
+        ]
+      }
+    ]
+  },
+  "semaglutide": {
+    "steps": [
+      {
+        "id": "personal",
+        "label": "Personal",
+        "component": "personal",
+        "title": "Personal information",
+        "subtitle": "Used to create your patient record and verify your identity with our licensed provider team."
+      },
+      {
+        "id": "metrics",
+        "label": "Metrics",
+        "component": "metrics",
+        "title": "Body metrics & goals",
+        "subtitle": "Your provider uses this to evaluate clinical appropriateness and set your initial dosing baseline.",
+        "bmiNote": "A BMI ≥ 27 with at least one weight-related comorbidity, or a BMI ≥ 30, is the standard eligibility threshold for semaglutide therapy. For type 2 diabetes management, BMI criteria may differ — your provider will confirm."
+      },
+      {
+        "id": "medical_history",
+        "label": "History",
+        "component": "conditions",
+        "title": "Medical history",
+        "subtitle": "Select all conditions that currently apply or that you have a history of. Your provider reviews this before approving your order.",
+        "contraindications": [
+          {
+            "key": "thyroid_cancer",
+            "warning": "Semaglutide carries an FDA black-box warning for thyroid C-cell tumors (medullary thyroid carcinoma / MEN2 syndrome). A personal or family history of MTC or MEN2 is a contraindication. Your provider will review and may not be able to approve this order."
+          },
+          {
+            "key": "pancreatitis",
+            "warning": "A personal history of acute or chronic pancreatitis requires close provider review. Semaglutide may be contraindicated depending on the nature of your history."
+          },
+          {
+            "key": "kidney_disease",
+            "warning": "Moderate-to-severe chronic kidney disease should be disclosed. Semaglutide does not require dose adjustment for renal impairment, but your provider will review your full picture."
+          }
+        ]
+      },
+      {
+        "id": "medications",
+        "label": "Medications",
+        "component": "medications",
+        "title": "Current medications & allergies",
+        "subtitle": "Include all prescription medications, OTC drugs, and supplements. This helps your provider identify interactions before approving your order.",
+        "commonInteractions": [
+          "Insulin or insulin secretagogues — combined use significantly increases hypoglycemia risk",
+          "Warfarin / blood thinners — INR monitoring recommended after initiating semaglutide",
+          "Oral medications requiring precise absorption timing — semaglutide delays gastric emptying",
+          "Thyroid medications (levothyroxine) — weight changes from semaglutide may affect optimal thyroid dosing"
+        ]
+      },
+      {
+        "id": "glp1_history",
+        "label": "GLP-1",
+        "component": "glp1_history",
+        "title": "GLP-1 agonist history",
+        "subtitle": "If you've used semaglutide or any GLP-1 medication before, your provider needs this to calibrate your starting dose and avoid re-titration side effects.",
+        "priorMedicineOptions": [
+          { "value": "semaglutide_ozempic", "label": "Semaglutide — Ozempic (brand)" },
+          { "value": "semaglutide_wegovy", "label": "Semaglutide — Wegovy (brand)" },
+          { "value": "compounded_sema", "label": "Compounded Semaglutide" },
+          { "value": "tirzepatide_mounjaro", "label": "Tirzepatide — Mounjaro (brand)" },
+          { "value": "tirzepatide_zepbound", "label": "Tirzepatide — Zepbound (brand)" },
+          { "value": "tirzepatide_compounded", "label": "Compounded Tirzepatide" },
+          { "value": "liraglutide", "label": "Liraglutide — Victoza / Saxenda" },
+          { "value": "other", "label": "Other GLP-1 medication" }
+        ],
+        "returningPatientNote": "Returning semaglutide patients resuming at a dose above 0.5 mg/week may need recent labs (HbA1c, CMP). Your provider will request this during review if applicable."
+      },
+      {
+        "id": "lifestyle",
+        "label": "Lifestyle",
+        "component": "lifestyle",
+        "title": "Lifestyle",
+        "subtitle": "Context that helps your provider set realistic expectations, monitor progress, and personalise your care plan."
+      },
+      {
+        "id": "review",
+        "label": "Review",
+        "component": "review",
+        "title": "Review & consent",
+        "subtitle": "Confirm your answers are accurate before submitting your intake to our provider team.",
+        "consents": [
+          {
+            "key": "consentClinicalReview",
+            "label": "I understand my order is subject to clinical review and may be modified or denied by a licensed provider."
+          },
+          {
+            "key": "consentNotReplacement",
+            "label": "I understand this service does not replace an in-person physician relationship and is not a substitute for emergency medical care."
+          },
+          {
+            "key": "consentProviderAdjust",
+            "label": "I understand my provider may adjust my semaglutide dose based on my medical history, even if it differs from what I configured."
+          },
+          {
+            "key": "consentCancellation",
+            "label": "I have read and agree to the cancellation and refund policy."
+          }
+        ]
+      }
+    ]
+  }
+}

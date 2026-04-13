@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Medicine, PurchaseType, MonthDoseSelection } from "@/lib/pdp-types";
 import { MEDICINE_CONFIG, buildDefaultSelections } from "@/lib/pdp-config";
+import { encodeOrder } from "@/lib/order-params";
 import { MonthSelector } from "./MonthSelector";
 import { DosePicker } from "./DosePicker";
 import { PurchaseTypeToggle } from "./PurchaseTypeToggle";
@@ -25,11 +27,22 @@ const COMPARE_LABEL: Record<Medicine, string> = {
 };
 
 export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
+  const router = useRouter();
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("subscription");
   const [monthCount, setMonthCount] = useState<1 | 2 | 3>(1);
   const [selections, setSelections] = useState<MonthDoseSelection[]>(() =>
     buildDefaultSelections(MEDICINE_CONFIG[defaultMedicine], 1)
   );
+
+  function handleCheckout() {
+    const encoded = encodeOrder({
+      medicine: defaultMedicine,
+      purchaseType,
+      monthCount,
+      selections,
+    });
+    router.push(`/checkout?order=${encoded}`);
+  }
 
   const handleMonthCountChange = useCallback((months: 1 | 2 | 3) => {
     setMonthCount(months);
@@ -149,7 +162,10 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
               selections={selections}
             />
 
-            <button className="w-full rounded-2xl bg-black px-6 py-4 text-base font-bold text-white transition-all duration-150 hover:bg-zinc-800 active:scale-[0.98]">
+            <button
+              onClick={handleCheckout}
+              className="w-full rounded-2xl bg-black px-6 py-4 text-base font-bold text-white transition-all duration-150 hover:bg-zinc-800 active:scale-[0.98]"
+            >
               {purchaseType === "subscription"
                 ? "Start subscription →"
                 : "Order one-time →"}
