@@ -22,7 +22,7 @@ export default function TirzepatidePage() {
         </div>
       </div>
 
-      <Configurator defaultMedicine="tirzepatide" />
+      <Configurator medicine="tirzepatide" />
       <HowItWorks />
       <ClinicalFaq />
     </>

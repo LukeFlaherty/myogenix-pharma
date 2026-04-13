@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { CartIcon } from "@/components/cart/CartIcon";
 
 const NAV_LINKS = [
   { label: "Weight Management", href: "/weight-management" },
@@ -51,6 +52,7 @@ export function Navbar() {
 
         {/* CTA */}
         <div className="hidden items-center gap-3 md:flex">
+          <CartIcon />
           <Link href="#" className="text-sm font-medium text-zinc-500 hover:text-black">
             Sign in
           </Link>
@@ -62,18 +64,21 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          className="flex items-center justify-center md:hidden"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label="Toggle menu"
-        >
-          <div className="flex h-8 w-8 flex-col items-center justify-center gap-1.5">
-            <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "translate-y-2 rotate-45")} />
-            <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "opacity-0")} />
-            <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "-translate-y-2 -rotate-45")} />
-          </div>
-        </button>
+        {/* Mobile hamburger + cart */}
+        <div className="flex items-center gap-2 md:hidden">
+          <CartIcon />
+          <button
+            className="flex items-center justify-center"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+            <div className="flex h-8 w-8 flex-col items-center justify-center gap-1.5">
+              <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "translate-y-2 rotate-45")} />
+              <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "opacity-0")} />
+              <span className={cn("block h-0.5 w-5 bg-black transition-all", menuOpen && "-translate-y-2 -rotate-45")} />
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

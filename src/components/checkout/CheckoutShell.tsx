@@ -17,6 +17,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { OrderConfig, PatientInfo, PaymentFormState } from "@/lib/checkout-types";
 import { orderToSearchParams } from "@/lib/order-params";
 import { CheckoutStepper } from "./CheckoutStepper";
@@ -102,7 +103,15 @@ export function CheckoutShell({ order }: Props) {
     <div className="mx-auto max-w-5xl px-4 py-12">
       {/* Header */}
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-black">Checkout</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-black">Checkout</h1>
+          <Link
+            href="/weight-management"
+            className="mt-1 inline-flex items-center gap-1 text-xs text-zinc-400 transition-colors hover:text-black"
+          >
+            ← Continue shopping
+          </Link>
+        </div>
         <CheckoutStepper current={step} />
       </div>
 

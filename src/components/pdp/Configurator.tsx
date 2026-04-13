@@ -11,9 +11,10 @@ import { DosePicker } from "./DosePicker";
 import { PurchaseTypeToggle } from "./PurchaseTypeToggle";
 import { OrderSummary } from "./OrderSummary";
 import { ProductHero } from "./ProductHero";
+import { useCart } from "@/lib/cart-context";
 
 interface Props {
-  defaultMedicine?: Medicine;
+  medicine: Medicine;
 }
 
 const COMPARE_HREF: Record<Medicine, string> = {
@@ -26,28 +27,25 @@ const COMPARE_LABEL: Record<Medicine, string> = {
   semaglutide: "Compare with Tirzepatide →",
 };
 
-export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
+export function Configurator({ medicine }: Props) {
   const router = useRouter();
+  const { addItem } = useCart();
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("subscription");
   const [monthCount, setMonthCount] = useState<1 | 2 | 3>(1);
   const [selections, setSelections] = useState<MonthDoseSelection[]>(() =>
-    buildDefaultSelections(MEDICINE_CONFIG[defaultMedicine], 1)
+    buildDefaultSelections(MEDICINE_CONFIG[medicine], 1)
   );
 
   function handleCheckout() {
-    const encoded = encodeOrder({
-      medicine: defaultMedicine,
-      purchaseType,
-      monthCount,
-      selections,
-    });
-    router.push(`/checkout?order=${encoded}`);
+    const config = { medicine, purchaseType, monthCount, selections };
+    addItem(config); // silently populate cart so the icon reflects the item
+    router.push(`/checkout?order=${encodeOrder(config)}`);
   }
 
   const handleMonthCountChange = useCallback((months: 1 | 2 | 3) => {
     setMonthCount(months);
     setSelections((prev) => {
-      const config = MEDICINE_CONFIG[defaultMedicine];
+      const config = MEDICINE_CONFIG[medicine];
       if (months <= prev.length) {
         return prev.slice(0, months);
       }
@@ -58,7 +56,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
         ...extra.map((e, i) => ({ month: prev.length + 1 + i, mg: e.mg })),
       ];
     });
-  }, [defaultMedicine]);
+  }, [medicine]);
 
   const handleDoseChange = useCallback((month: number, mg: number) => {
     setSelections((prev) =>
@@ -66,7 +64,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
     );
   }, []);
 
-  const config = MEDICINE_CONFIG[defaultMedicine];
+  const config = MEDICINE_CONFIG[medicine];
 
   return (
     <section id="configure" className="bg-white px-4 py-16">
@@ -74,7 +72,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Left: Hero + visual + trust */}
           <div className="flex flex-col gap-8">
-            <ProductHero medicine={defaultMedicine} />
+            <ProductHero medicine={medicine} />
 
             {/* Product visual */}
             <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50">
@@ -122,10 +120,10 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
 
             {/* Compare link */}
             <Link
-              href={COMPARE_HREF[defaultMedicine]}
+              href={COMPARE_HREF[medicine]}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline underline-offset-2 hover:text-black"
             >
-              {COMPARE_LABEL[defaultMedicine]}
+              {COMPARE_LABEL[medicine]}
             </Link>
           </div>
 
@@ -145,7 +143,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
               <div className="flex flex-col gap-3">
                 {selections.map((sel, i) => (
                   <DosePicker
-                    key={`${defaultMedicine}-month-${sel.month}`}
+                    key={`${medicine}-month-${sel.month}`}
                     month={sel.month}
                     selectedMg={sel.mg}
                     prevMonthMg={i === 0 ? null : selections[i - 1].mg}
@@ -157,7 +155,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
             </div>
 
             <OrderSummary
-              medicine={defaultMedicine}
+              medicine={medicine}
               purchaseType={purchaseType}
               selections={selections}
             />
@@ -166,9 +164,7 @@ export function Configurator({ defaultMedicine = "tirzepatide" }: Props) {
               onClick={handleCheckout}
               className="w-full rounded-2xl bg-black px-6 py-4 text-base font-bold text-white transition-all duration-150 hover:bg-zinc-800 active:scale-[0.98]"
             >
-              {purchaseType === "subscription"
-                ? "Start subscription →"
-                : "Order one-time →"}
+              {purchaseType === "subscription" ? "Start subscription →" : "Order one-time →"}
             </button>
 
             <p className="text-center text-xs text-zinc-400">

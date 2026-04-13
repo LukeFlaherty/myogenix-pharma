@@ -22,7 +22,7 @@ export default function SemaglutidePage() {
         </div>
       </div>
 
-      <Configurator defaultMedicine="semaglutide" />
+      <Configurator medicine="semaglutide" />
       <HowItWorks />
       <ClinicalFaq />
     </>
