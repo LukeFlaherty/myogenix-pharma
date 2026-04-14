@@ -87,7 +87,7 @@ export default async function IntakeCompletePage({ searchParams }: Props) {
              * Order status should be fetched server-side by orderId.
              */}
             <Link
-              href="#"
+              href="/portal/dashboard"
               className="flex-1 rounded-xl bg-black py-3 text-center text-sm font-bold text-white transition-colors hover:bg-zinc-800"
             >
               Go to patient portal →
