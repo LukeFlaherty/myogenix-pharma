@@ -53,7 +53,7 @@ export function Navbar() {
         {/* CTA */}
         <div className="hidden items-center gap-3 md:flex">
           <CartIcon />
-          <Link href="#" className="text-sm font-medium text-zinc-500 hover:text-black">
+          <Link href="/portal/login" className="text-sm font-medium text-zinc-500 hover:text-black">
             Sign in
           </Link>
           <Link
@@ -95,6 +95,13 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/portal/login"
+              onClick={() => setMenuOpen(false)}
+              className="text-sm font-medium text-zinc-600 hover:text-black"
+            >
+              Sign in
+            </Link>
             <Link
               href="/weight-management"
               onClick={() => setMenuOpen(false)}

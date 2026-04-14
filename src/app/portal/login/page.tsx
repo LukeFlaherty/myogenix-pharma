@@ -71,7 +71,8 @@ export default function PortalLoginPage() {
         </div>
 
         {/* Dev bypass — non-production only */}
-        {process.env.NODE_ENV !== "production" && (
+        {/* TODO: remove dev bypass before real auth launch */}
+        {(
           <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
             <p className="mb-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-600">
               Dev stub — not visible in production

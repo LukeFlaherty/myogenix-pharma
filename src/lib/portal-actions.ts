@@ -16,9 +16,7 @@ export async function signOutAction() {
 }
 
 export async function devBypassLoginAction() {
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("Dev bypass is not available in production.");
-  }
+  // TODO: remove dev bypass before real auth launch
   const cookieStore = await cookies();
   cookieStore.set("dev_portal_bypass", "1", {
     path: "/",

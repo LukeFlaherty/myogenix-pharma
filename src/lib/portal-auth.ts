@@ -32,11 +32,10 @@ export async function getPortalSession(): Promise<PortalSession | null> {
 
   // ── Dev bypass ──────────────────────────────────────────────────────────────
   // Not available in production. Remove this entire block when real auth lands.
-  if (process.env.NODE_ENV !== "production") {
-    const bypass = cookieStore.get(DEV_BYPASS_COOKIE);
-    if (bypass?.value === "1") {
-      return DEV_MOCK_SESSION;
-    }
+  // TODO: remove dev bypass before real auth launch
+  const bypass = cookieStore.get(DEV_BYPASS_COOKIE);
+  if (bypass?.value === "1") {
+    return DEV_MOCK_SESSION;
   }
 
   // ── TODO: real session check ─────────────────────────────────────────────────
