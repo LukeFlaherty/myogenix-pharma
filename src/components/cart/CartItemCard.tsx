@@ -17,7 +17,7 @@ interface Props {
   compact?: boolean;
 }
 
-const MEDICINE_COLORS: Record<Medicine, string> = {
+const MEDICINE_COLORS: Partial<Record<Medicine, string>> = {
   tirzepatide: "bg-zinc-900 text-white",
   semaglutide: "bg-zinc-200 text-zinc-800",
 };
@@ -38,7 +38,7 @@ export function CartItemCard({ item, onRemove, showCheckout, onCheckout, compact
       {/* Header */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold capitalize ${MEDICINE_COLORS[item.medicine]}`}>
+          <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold capitalize ${MEDICINE_COLORS[item.medicine] ?? "bg-zinc-100 text-zinc-700"}`}>
             {item.medicine}
           </span>
           <span className="rounded-full border border-zinc-200 px-2.5 py-0.5 text-[11px] font-semibold capitalize text-zinc-500">

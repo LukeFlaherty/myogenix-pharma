@@ -85,11 +85,12 @@ export const STUB_PATIENTS: AdminPatient[] = [
 // ─── Orders ───────────────────────────────────────────────────────────────────
 
 export const STUB_ALL_ORDERS: AdminOrder[] = [
-  // Alex Johnson — all 4 portal orders
-  { ...STUB_ORDERS[0], patientId: "usr_dev_001" }, // ORD-2604A pending_intake
-  { ...STUB_ORDERS[1], patientId: "usr_dev_001" }, // ORD-2603B pending_review
-  { ...STUB_ORDERS[2], patientId: "usr_dev_001" }, // ORD-2602C shipped
-  { ...STUB_ORDERS[3], patientId: "usr_dev_001" }, // ORD-2512D delivered
+  // Alex Johnson — all portal orders (index 0 = wolverine, 1 = 2604A, etc.)
+  { ...STUB_ORDERS[0], patientId: "usr_dev_001" }, // ORD-2604P wolverine approved
+  { ...STUB_ORDERS[1], patientId: "usr_dev_001" }, // ORD-2604A pending_intake
+  { ...STUB_ORDERS[2], patientId: "usr_dev_001" }, // ORD-2603B pending_review
+  { ...STUB_ORDERS[3], patientId: "usr_dev_001" }, // ORD-2602C shipped
+  { ...STUB_ORDERS[4], patientId: "usr_dev_001" }, // ORD-2512D delivered
   // Maria Garcia
   {
     orderId: "ORD-2605E",

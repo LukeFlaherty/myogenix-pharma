@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { devAdminBypassAction } from "@/lib/admin-actions";
 
 export const metadata: Metadata = {
@@ -18,12 +19,8 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         {/* Brand */}
         <div className="mb-8 flex flex-col items-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 mb-4">
-            <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-            </svg>
-          </div>
-          <h1 className="text-xl font-bold text-white">MyoGenix Admin</h1>
+          <Image src="/logo.png" alt="MyoGenix Pharma" width={150} height={44} className="mb-2 h-10 w-auto brightness-0 invert" priority />
+          <h1 className="text-xl font-bold text-white">Admin Portal</h1>
           <p className="mt-1 text-sm text-slate-400">Internal operations portal — authorized staff only.</p>
         </div>
 

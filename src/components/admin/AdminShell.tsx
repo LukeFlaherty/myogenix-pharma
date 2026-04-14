@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { adminSignOutAction } from "@/lib/admin-actions";
@@ -46,6 +47,17 @@ const NAV_ITEMS = [
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.25" />
         <path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/products",
+    label: "Products",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="1.5" y="4.5" width="13" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
+        <path d="M5 4.5V3a3 3 0 016 0v1.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+        <path d="M5.5 8h5M5.5 11h3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -97,20 +109,9 @@ export function AdminShell({ session, pendingReviewCount, children }: Props) {
       <aside className="hidden w-60 shrink-0 flex-col bg-slate-900 md:flex">
         {/* Brand */}
         <div className="flex items-center gap-2 border-b border-slate-800 px-5 py-5">
-          <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10">
-              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-              </svg>
-            </div>
-            <div>
-              <span className="text-sm font-bold tracking-tight text-white">
-                MyoGenix<span className="font-light">Pharma</span>
-              </span>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                Admin
-              </p>
-            </div>
+          <Link href="/admin/dashboard" className="flex flex-col gap-1">
+            <Image src="/logo.png" alt="MyoGenix Pharma" width={130} height={40} className="h-8 w-auto brightness-0 invert" />
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Admin Portal</p>
           </Link>
         </div>
 
@@ -163,13 +164,8 @@ export function AdminShell({ session, pendingReviewCount, children }: Props) {
       {/* ── Mobile header ─────────────────────────────────────────────────────── */}
       <div className="flex flex-1 flex-col md:overflow-hidden">
         <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-slate-900 px-4 py-3 md:hidden">
-          <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-white/10">
-              <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-white">Admin</span>
+          <Link href="/admin/dashboard">
+            <Image src="/logo.png" alt="MyoGenix Pharma" width={110} height={32} className="h-7 w-auto brightness-0 invert" />
           </Link>
           <button
             type="button"

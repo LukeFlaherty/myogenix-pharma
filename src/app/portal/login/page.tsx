@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { devBypassLoginAction } from "@/lib/portal-actions";
 
 export const metadata: Metadata = {
@@ -12,15 +13,8 @@ export default function PortalLoginPage() {
       <div className="w-full max-w-sm">
         {/* Brand */}
         <div className="mb-8 flex flex-col items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-black">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-              </svg>
-            </div>
-            <span className="text-base font-bold tracking-tight text-black">
-              MyoGenix<span className="font-light">Pharma</span>
-            </span>
+          <Link href="/">
+            <Image src="/logo.png" alt="MyoGenix Pharma" width={150} height={44} className="h-10 w-auto" priority />
           </Link>
           <h1 className="mt-6 text-xl font-bold text-black">Sign in to your portal</h1>
           <p className="mt-1 text-sm text-zinc-500">Track orders, complete intake, and message your care team.</p>

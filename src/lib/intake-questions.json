@@ -204,5 +204,109 @@
         ]
       }
     ]
+  },
+  "peptide": {
+    "steps": [
+      {
+        "id": "personal",
+        "label": "Personal",
+        "component": "personal",
+        "title": "Personal information",
+        "subtitle": "Used to create your patient record and verify your identity with our licensed provider team."
+      },
+      {
+        "id": "metrics",
+        "label": "Metrics",
+        "component": "metrics",
+        "title": "Body metrics & goals",
+        "subtitle": "Your provider uses this to assess your overall health baseline and match your protocol to your goals.",
+        "bmiNote": "Peptide therapies do not have a BMI eligibility requirement. Your provider reviews your full clinical picture to confirm appropriateness."
+      },
+      {
+        "id": "medical_history",
+        "label": "History",
+        "component": "conditions",
+        "title": "Medical history",
+        "subtitle": "Select all conditions that currently apply or that you have a history of. Your provider reviews this before approving your order.",
+        "contraindications": [
+          {
+            "key": "kidney_disease",
+            "warning": "Moderate-to-severe kidney disease may affect peptide clearance and dosing. Your provider will review before approving."
+          },
+          {
+            "key": "liver_disease",
+            "warning": "Hepatic impairment may affect peptide metabolism. Please disclose any history of liver disease so your provider can assess appropriateness."
+          },
+          {
+            "key": "thyroid_cancer",
+            "warning": "Active cancer or a history of certain cancers requires careful provider review before starting peptide therapy. Growth-hormone-stimulating peptides (sermorelin, CJC-1295/Ipamorelin) may be contraindicated."
+          }
+        ]
+      },
+      {
+        "id": "medications",
+        "label": "Medications",
+        "component": "medications",
+        "title": "Current medications & allergies",
+        "subtitle": "Include all prescription medications, OTC drugs, and supplements. Peptides can interact with certain medications — your provider reviews this before approval.",
+        "commonInteractions": [
+          "Immunosuppressants — some peptides modulate immune function; combined use requires provider review",
+          "Growth hormone or IGF-1 — concurrent use with GH-stimulating peptides (sermorelin, CJC-1295, ipamorelin) requires provider assessment",
+          "Blood thinners / anticoagulants — BPC-157 and TB-500 may affect platelet aggregation",
+          "Blood pressure medications — some peptides may have mild hypotensive effects"
+        ]
+      },
+      {
+        "id": "peptide_history",
+        "label": "Peptide Hx",
+        "component": "peptide_history",
+        "title": "Peptide use history",
+        "subtitle": "Prior peptide experience helps your provider calibrate your protocol and avoid redundant re-loading phases.",
+        "priorMedicineOptions": [
+          { "value": "bpc-157",               "label": "BPC-157" },
+          { "value": "tb-500",                "label": "TB-500" },
+          { "value": "cjc-1295-ipamorelin",   "label": "CJC-1295 / Ipamorelin" },
+          { "value": "sermorelin",             "label": "Sermorelin" },
+          { "value": "aod-9604",              "label": "AOD-9604" },
+          { "value": "pt-141",                "label": "PT-141 (Bremelanotide)" },
+          { "value": "epithalon",             "label": "Epithalon" },
+          { "value": "nad-plus",              "label": "NAD+" },
+          { "value": "other",                 "label": "Other peptide(s)" }
+        ],
+        "returningPatientNote": "If you are resuming a growth-hormone-stimulating protocol (sermorelin, CJC-1295/Ipamorelin) after a break of more than 3 months, your provider may request recent IGF-1 labs before approving a higher starting dose."
+      },
+      {
+        "id": "lifestyle",
+        "label": "Lifestyle",
+        "component": "lifestyle",
+        "title": "Lifestyle",
+        "subtitle": "Your provider uses this to personalise your protocol, set realistic expectations, and monitor progress."
+      },
+      {
+        "id": "review",
+        "label": "Review",
+        "component": "review",
+        "title": "Review & consent",
+        "subtitle": "Confirm your answers are accurate before submitting your intake to our provider team.",
+        "consents": [
+          {
+            "key": "consentClinicalReview",
+            "label": "I understand my order is subject to clinical review and may be modified or denied by a licensed provider."
+          },
+          {
+            "key": "consentNotReplacement",
+            "label": "I understand this service does not replace an in-person physician relationship and is not a substitute for emergency medical care."
+          },
+          {
+            "key": "consentProviderAdjust",
+            "label": "I understand my provider may adjust my peptide dose or protocol based on my medical history, even if it differs from what I configured."
+          },
+          {
+            "key": "consentCancellation",
+            "label": "I have read and agree to the cancellation and refund policy."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { signOutAction } from "@/lib/portal-actions";
@@ -104,15 +105,8 @@ export function PortalShell({ session, children }: Props) {
       <aside className="hidden w-60 shrink-0 flex-col border-r border-zinc-200 bg-white md:flex">
         {/* Brand */}
         <div className="flex items-center gap-2 border-b border-zinc-100 px-5 py-5">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black">
-              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold tracking-tight text-black">
-              MyoGenix<span className="font-light">Pharma</span>
-            </span>
+          <Link href="/">
+            <Image src="/logo.png" alt="MyoGenix Pharma" width={130} height={40} className="h-8 w-auto" />
           </Link>
         </div>
 
@@ -162,13 +156,8 @@ export function PortalShell({ session, children }: Props) {
       {/* ── Mobile header ─────────────────────────────────────────────────── */}
       <div className="flex flex-1 flex-col md:overflow-hidden">
         <header className="flex shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-4 py-3 md:hidden">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-black">
-              <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-black">Portal</span>
+          <Link href="/">
+            <Image src="/logo.png" alt="MyoGenix Pharma" width={110} height={32} className="h-7 w-auto" />
           </Link>
           <button
             type="button"

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CartIcon } from "@/components/cart/CartIcon";
 
 const NAV_LINKS = [
   { label: "Weight Management", href: "/weight-management" },
+  { label: "Peptides", href: "/peptides" },
   { label: "How it works", href: "/#how-it-works" },
   { label: "FAQ", href: "/#faq" },
 ];
@@ -20,15 +22,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-zinc-100 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black">
-            <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-            </svg>
-          </div>
-          <span className="text-sm font-bold tracking-tight text-black">
-            MyoGenix<span className="font-light">Pharma</span>
-          </span>
+        <Link href="/">
+          <Image src="/logo.png" alt="MyoGenix Pharma" width={140} height={40} className="h-9 w-auto" priority />
         </Link>
 
         {/* Desktop nav */}

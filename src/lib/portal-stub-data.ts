@@ -25,6 +25,21 @@ export const DEV_MOCK_SESSION: PortalSession = {
 
 export const STUB_ORDERS: PortalOrder[] = [
   {
+    orderId: "ORD-2604P",
+    medicine: "wolverine",
+    purchaseType: "one-time",
+    monthCount: 2,
+    selections: [
+      { month: 1, mg: 5 },
+      { month: 2, mg: 5 },
+    ],
+    status: "approved",
+    total: 387,
+    createdAt: "2026-04-05T10:00:00Z",
+    updatedAt: "2026-04-06T09:00:00Z",
+    intakeCompleted: true,
+  },
+  {
     orderId: "ORD-2604A",
     medicine: "tirzepatide",
     purchaseType: "subscription",

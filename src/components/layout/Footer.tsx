@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const LINKS = {
   Programs: [
@@ -10,6 +11,7 @@ const LINKS = {
     { label: "About", href: "#" },
     { label: "How it works", href: "/#how-it-works" },
     { label: "FAQ", href: "/#faq" },
+    { label: "Affiliate Program", href: "/affiliates" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "#" },
@@ -25,15 +27,8 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black">
-                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122" />
-                </svg>
-              </div>
-              <span className="text-sm font-bold tracking-tight text-black">
-                MyoGenix<span className="font-light">Pharma</span>
-              </span>
+            <Link href="/">
+              <Image src="/logo.png" alt="MyoGenix Pharma" width={130} height={40} className="h-8 w-auto" />
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-zinc-400">
               Clinical-grade GLP-1 therapy, configured for your protocol.

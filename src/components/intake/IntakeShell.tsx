@@ -25,8 +25,11 @@ import { Step2Metrics } from "./steps/Step2Metrics";
 import { Step3MedHistory } from "./steps/Step3MedHistory";
 import { Step4Medications } from "./steps/Step4Medications";
 import { Step5GlpHistory } from "./steps/Step5GlpHistory";
+import { Step5PeptideHistory } from "./steps/Step5PeptideHistory";
 import { Step6Lifestyle } from "./steps/Step6Lifestyle";
 import { Step7Review } from "./steps/Step7Review";
+import { MEDICINE_CONFIG } from "@/lib/pdp-config";
+import type { Medicine } from "@/lib/pdp-types";
 
 import questionsJson from "@/lib/intake-questions.json";
 
@@ -95,6 +98,8 @@ function StepRenderer({
       return <Step4Medications data={data} onChange={onChange} title={config.title} subtitle={config.subtitle} commonInteractions={config.commonInteractions ?? []} />;
     case "glp1_history":
       return <Step5GlpHistory data={data} onChange={onChange} title={config.title} subtitle={config.subtitle} priorMedicineOptions={config.priorMedicineOptions ?? []} returningPatientNote={config.returningPatientNote ?? ""} />;
+    case "peptide_history":
+      return <Step5PeptideHistory data={data} onChange={onChange} title={config.title} subtitle={config.subtitle} priorMedicineOptions={config.priorMedicineOptions ?? []} returningPatientNote={config.returningPatientNote ?? ""} />;
     case "lifestyle":
       return <Step6Lifestyle data={data} onChange={onChange} title={config.title} subtitle={config.subtitle} />;
     case "review":
@@ -113,7 +118,8 @@ export function IntakeShell({ order, orderId }: Props) {
   const [submitting, setSubmitting] = useState(false);
 
   const questions = questionsJson as Record<string, { steps: StepConfig[] }>;
-  const steps: StepConfig[] = questions[order.medicine]?.steps ?? questions["tirzepatide"].steps;
+  const intakeKey = MEDICINE_CONFIG[order.medicine as Medicine]?.intakeKey ?? order.medicine;
+  const steps: StepConfig[] = questions[order.medicine]?.steps ?? questions[intakeKey]?.steps ?? questions["tirzepatide"].steps;
   const totalSteps = steps.length;
   const currentStep = steps[stepIndex];
   const progress = ((stepIndex) / (totalSteps - 1)) * 100;

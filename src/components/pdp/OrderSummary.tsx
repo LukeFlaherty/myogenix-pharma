@@ -82,7 +82,7 @@ export function OrderSummary({ medicine, purchaseType, selections }: Props) {
           <p className="text-xs text-zinc-500">
             <span className="font-semibold text-black">Auto-renews</span> at{" "}
             <span className="font-semibold text-black">
-              {renewalDose.mg} mg · ${renewalPrice.toFixed(0)}/mo
+              {renewalConfig.label} · ${renewalPrice.toFixed(0)}/mo
             </span>{" "}
             after your supply ends. Cancel anytime before renewal.
           </p>

@@ -55,7 +55,7 @@ export function DosePicker({
           </span>
         ) : (
           <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-500">
-            Prev: {prevMonthMg} mg
+            Prev: {config.doses.find((d) => d.mg === prevMonthMg)?.label ?? `${prevMonthMg} ${config.doseUnit ?? "mg"}`}
           </span>
         )}
       </div>
@@ -138,20 +138,22 @@ export function DosePicker({
         )}
       </div>
 
-      {/* Weekly breakdown note */}
-      <p className="mt-2 text-[11px] text-zinc-400">
-        {selectedDose.mg} mg/month ={" "}
-        <span className="font-semibold text-zinc-500">
-          {(selectedDose.mg / 4 % 1 === 0
-            ? selectedDose.mg / 4
-            : (selectedDose.mg / 4).toFixed(2)
-          )} mg/week
-        </span>{" "}
-        · 4 injections per month
-      </p>
+      {/* Weekly breakdown — only relevant for GLP-1 escalation protocols */}
+      {config.escalationStep > 0 && (
+        <p className="mt-2 text-[11px] text-zinc-400">
+          {selectedDose.mg} mg/month ={" "}
+          <span className="font-semibold text-zinc-500">
+            {(selectedDose.mg / 4 % 1 === 0
+              ? selectedDose.mg / 4
+              : (selectedDose.mg / 4).toFixed(2)
+            )} mg/week
+          </span>{" "}
+          · 4 injections per month
+        </p>
+      )}
 
-      {/* Returning customer bloodwork notice */}
-      {month === 1 && selectedMg !== config.startingDose && (
+      {/* Returning customer bloodwork notice — GLP-1 only */}
+      {config.escalationStep > 0 && month === 1 && selectedMg !== config.startingDose && (
         <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
           <span className="mt-0.5 shrink-0 text-zinc-400">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

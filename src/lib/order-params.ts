@@ -51,14 +51,18 @@ export function calcOrderTotal(config: OrderConfig): {
   const medConfig = MEDICINE_CONFIG[config.medicine];
   const DISCOUNT = 0.1;
 
+  const isBottleModel = medConfig.purchaseModel === "bottle";
+  const PERIOD_LABELS = isBottleModel
+    ? ["Bottle 1", "Bottle 2", "Bottle 3"]
+    : ["First month", "Second month", "Third month"];
+
   const lineItems = config.selections.map((sel) => {
     const dose = medConfig.doses.find((d) => d.mg === sel.mg)!;
     const price =
       config.purchaseType === "subscription"
         ? dose.pricePerMonth * (1 - DISCOUNT)
         : dose.pricePerMonth;
-    const MONTH_LABELS = ["First month", "Second month", "Third month"];
-    return { label: `${MONTH_LABELS[sel.month - 1]} — ${dose.label}`, price };
+    return { label: `${PERIOD_LABELS[sel.month - 1]} — ${dose.label}`, price };
   });
 
   const subtotal = config.selections.reduce((sum, sel) => {

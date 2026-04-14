@@ -40,9 +40,11 @@ const EMPTY_PAYMENT: PaymentFormState = {
 
 interface Props {
   order: OrderConfig;
+  /** Display name of the referring affiliate store, e.g. "Jakesvitamin". Null if no attribution. */
+  affiliateName: string | null;
 }
 
-export function CheckoutShell({ order }: Props) {
+export function CheckoutShell({ order, affiliateName }: Props) {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [patient, setPatient] = useState<PatientInfo>(EMPTY_PATIENT);
@@ -101,6 +103,19 @@ export function CheckoutShell({ order }: Props) {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
+      {/* Affiliate attribution banner */}
+      {affiliateName && (
+        <div className="mb-6 flex items-center gap-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-emerald-600">
+            <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" fill="currentColor" fillRule="evenodd" clipRule="evenodd" opacity=".2"/>
+            <path d="M2 8.5l3.5 3.5 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <p className="text-sm text-emerald-800">
+            Referred by <span className="font-semibold">{affiliateName}</span> — thank you for supporting our retail partners.
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -246,7 +261,7 @@ export function CheckoutShell({ order }: Props) {
         {/* Right: sticky summary */}
         <div className="hidden lg:block">
           <div className="sticky top-24">
-            <OrderReviewPanel order={order} />
+            <OrderReviewPanel order={order} affiliateName={affiliateName} />
           </div>
         </div>
       </div>

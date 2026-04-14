@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import type { Medicine, PurchaseType, MonthDoseSelection } from "@/lib/pdp-types";
 import { MEDICINE_CONFIG, buildDefaultSelections } from "@/lib/pdp-config";
 import { encodeOrder } from "@/lib/order-params";
@@ -17,12 +18,12 @@ interface Props {
   medicine: Medicine;
 }
 
-const COMPARE_HREF: Record<Medicine, string> = {
+const COMPARE_HREF: Partial<Record<Medicine, string>> = {
   tirzepatide: "/weight-management/semaglutide",
   semaglutide: "/weight-management/tirzepatide",
 };
 
-const COMPARE_LABEL: Record<Medicine, string> = {
+const COMPARE_LABEL: Partial<Record<Medicine, string>> = {
   tirzepatide: "Compare with Semaglutide →",
   semaglutide: "Compare with Tirzepatide →",
 };
@@ -74,27 +75,16 @@ export function Configurator({ medicine }: Props) {
           <div className="flex flex-col gap-8">
             <ProductHero medicine={medicine} />
 
-            {/* Product visual */}
-            <div className="relative flex aspect-square max-w-xs items-center justify-center overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50">
-              <div className="flex flex-col items-center gap-3">
-                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-zinc-200">
-                  <svg
-                    className="h-12 w-12 text-zinc-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122m-7.5 0A2.25 2.25 0 007.5 13.5m7.5-2.257a2.25 2.25 0 01-.659 1.591L10.5 17M10.5 17l3.75 3.75M10.5 17l-3.75 3.75"
-                    />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-zinc-700">{config.name}</p>
-                <p className="text-xs text-zinc-400">Compounded injectable</p>
-              </div>
+            {/* Product image */}
+            <div className="overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50">
+              <Image
+                src={`/products/${medicine}.webp`}
+                alt={config.name}
+                width={480}
+                height={480}
+                className="aspect-square w-full object-cover"
+                priority
+              />
             </div>
 
             {/* Trust badges */}
@@ -118,13 +108,15 @@ export function Configurator({ medicine }: Props) {
               ))}
             </div>
 
-            {/* Compare link */}
-            <Link
-              href={COMPARE_HREF[medicine]}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline underline-offset-2 hover:text-black"
-            >
-              {COMPARE_LABEL[medicine]}
-            </Link>
+            {/* Compare link — GLP-1s only */}
+            {COMPARE_HREF[medicine] && (
+              <Link
+                href={COMPARE_HREF[medicine]!}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline underline-offset-2 hover:text-black"
+              >
+                {COMPARE_LABEL[medicine]}
+              </Link>
+            )}
           </div>
 
           {/* Right: Configurator */}

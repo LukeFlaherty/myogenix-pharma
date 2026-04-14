@@ -1,5 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MEDICINE_CONFIG } from "@/lib/pdp-config";
+
+const PRODUCT_IMAGE: Record<"tirzepatide" | "semaglutide", string> = {
+  tirzepatide: "/products/tirzepatide.webp",
+  semaglutide: "/products/semaglutide.webp",
+};
 
 const PRODUCTS = [
   {
@@ -40,6 +46,17 @@ export function ProductCards() {
             key={prod.medicine}
             className="flex flex-col rounded-3xl border border-zinc-200 bg-white p-8 transition-shadow hover:shadow-md"
           >
+            {/* Product image */}
+            <div className="-mx-8 -mt-8 mb-6 overflow-hidden rounded-t-3xl">
+              <Image
+                src={PRODUCT_IMAGE[prod.medicine]}
+                alt={config.name}
+                width={480}
+                height={260}
+                className="aspect-square w-full object-cover"
+              />
+            </div>
+
             {/* Header */}
             <div className="flex items-start justify-between">
               <div>
@@ -48,11 +65,6 @@ export function ProductCards() {
                 </span>
                 <h3 className="mt-3 text-2xl font-bold text-black">{config.name}</h3>
                 <p className="mt-1 text-sm text-zinc-500">{config.genericName}</p>
-              </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100">
-                <svg className="h-6 w-6 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.122m-7.5 0A2.25 2.25 0 007.5 13.5m7.5-2.257a2.25 2.25 0 01-.659 1.591L10.5 17M10.5 17l3.75 3.75M10.5 17l-3.75 3.75" />
-                </svg>
               </div>
             </div>
 

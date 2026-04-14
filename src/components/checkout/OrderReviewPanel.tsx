@@ -4,9 +4,10 @@ import { MEDICINE_CONFIG } from "@/lib/pdp-config";
 
 interface Props {
   order: OrderConfig;
+  affiliateName?: string | null;
 }
 
-export function OrderReviewPanel({ order }: Props) {
+export function OrderReviewPanel({ order, affiliateName }: Props) {
   const { lineItems, savings, consultFee, total } = calcOrderTotal(order);
   const config = MEDICINE_CONFIG[order.medicine];
   const renewalDose = order.selections[order.selections.length - 1];
@@ -81,6 +82,20 @@ export function OrderReviewPanel({ order }: Props) {
         <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-3">
           <p className="text-xs text-zinc-500">
             Includes a $79 provider consultation. Charged only if your order is approved.
+          </p>
+        </div>
+      )}
+
+      {/* Affiliate attribution */}
+      {affiliateName && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
+          <span className="text-emerald-600">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6.5l2.5 2.5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          <p className="text-[11px] text-emerald-800">
+            Referred by <span className="font-semibold">{affiliateName}</span>
           </p>
         </div>
       )}
