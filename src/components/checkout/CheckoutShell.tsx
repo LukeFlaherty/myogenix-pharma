@@ -2,24 +2,46 @@
 
 /**
  * CheckoutShell
+ * =============
+ * Handles one checkout session: patient info → payment → review → submit.
+ * Accepts ONE or MANY OrderConfigs — the same flow covers both a single PDP
+ * purchase and a full multi-medicine cart checkout.
  *
- * State machine: info → payment → review → (submit → /intake?order=...)
+ * AFTER PAYMENT the patient is sent to /checkout/confirmation, which then
+ * directs them to their portal dashboard. The portal shows a separate
+ * "Complete intake" action for each order that still needs a questionnaire.
+ * This replaces the old per-order direct-to-intake routing and allows the
+ * patient to complete each intake form independently at their own pace.
  *
- * DATABASE STUB: On submit, this should call a server action that:
- *   1. Creates a Stripe Customer (if new) or retrieves existing
- *   2. Creates a Stripe PaymentIntent or Subscription
- *   3. Inserts an `orders` row in your DB with status "pending_intake"
- *   4. Inserts a `patients` row (or upsert by email)
- *   5. Returns the new orderId → redirect to /intake?order=<orderId>
+ * ─── DATABASE STUB ────────────────────────────────────────────────────────────
+ * On submit, replace the stub block with a real server action:
  *
- * For now: generates a fake orderId and navigates directly to intake.
+ *   const { batchId, orderIds } = await createOrderBatch({
+ *     orders,                                 // OrderConfig[]
+ *     patient,                                // PatientInfo
+ *     stripePaymentMethodId: payment._stripePaymentMethodId,
+ *     affiliateSlug,                          // from HTTP-only cookie (pass as prop)
+ *   });
+ *
+ * The server action should:
+ *   1. Upsert the patient row (by email)
+ *   2. Create a Stripe PaymentIntent for the grand total
+ *   3. Insert one `order_batches` row → batchId
+ *   4. Insert one `orders` row per OrderConfig with status "pending_intake"
+ *   5. Return { batchId, orderIds }
+ *
+ * Then redirect to:
+ *   /checkout/confirmation?batch=<encodeBatch(orders)>&orderIds=<ids>
+ *
+ * STUB: generates fake order IDs and skips all server-side work.
+ * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { OrderConfig, PatientInfo, PaymentFormState } from "@/lib/checkout-types";
-import { orderToSearchParams } from "@/lib/order-params";
+import { encodeBatch, calcBatchTotal } from "@/lib/order-params";
 import { CheckoutStepper } from "./CheckoutStepper";
 import { PatientInfoForm } from "./PatientInfoForm";
 import { PaymentPanel } from "./PaymentPanel";
@@ -39,12 +61,13 @@ const EMPTY_PAYMENT: PaymentFormState = {
 };
 
 interface Props {
-  order: OrderConfig;
-  /** Display name of the referring affiliate store, e.g. "Jakesvitamin". Null if no attribution. */
+  /** One or more medicines being purchased in this session. */
+  orders: OrderConfig[];
+  /** Display name of the referring affiliate store. Null if no attribution. */
   affiliateName: string | null;
 }
 
-export function CheckoutShell({ order, affiliateName }: Props) {
+export function CheckoutShell({ orders, affiliateName }: Props) {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [patient, setPatient] = useState<PatientInfo>(EMPTY_PATIENT);
@@ -63,43 +86,49 @@ export function CheckoutShell({ order, affiliateName }: Props) {
     []
   );
 
-  const { total } = calcOrderTotal(order);
-  const config = MEDICINE_CONFIG[order.medicine];
+  const grandTotal = calcBatchTotal(orders);
+  const isSingle = orders.length === 1;
+
+  // ── Routing helpers ──────────────────────────────────────────────────────────
+
+  /**
+   * Builds the confirmation URL with encoded order configs + order IDs.
+   * The confirmation page decodes the batch for display and links to the portal.
+   */
+  function buildConfirmationUrl(orderIds: string[]): string {
+    const batch = encodeBatch(orders);
+    return `/checkout/confirmation?batch=${batch}&orderIds=${orderIds.join(",")}`;
+  }
+
+  // ── Dev skip (bypasses payment panel in development) ────────────────────────
 
   function handleDevSkip() {
-    const fakeOrderId = `ORD-DEV-${Date.now().toString(36).toUpperCase()}`;
-    const params = orderToSearchParams(order);
-    params.set("orderId", fakeOrderId);
-    router.push(`/checkout/confirmation?${params.toString()}`);
+    const fakeOrderIds = orders.map(
+      () => `ORD-DEV-${Date.now().toString(36).toUpperCase()}`
+    );
+    router.push(buildConfirmationUrl(fakeOrderIds));
   }
+
+  // ── Submit ───────────────────────────────────────────────────────────────────
 
   async function handleSubmit() {
     setSubmitting(true);
 
-    /**
-     * TODO: Replace this block with a real server action, e.g.:
-     *
-     * const { orderId, clientSecret } = await createOrder({
-     *   patient,
-     *   order,
-     *   stripePaymentMethodId: payment._stripePaymentMethodId,
-     * });
-     *
-     * // Confirm the PaymentIntent (handles 3DS if needed)
-     * const { error } = await stripe.confirmCardPayment(clientSecret);
-     * if (error) { setSubmitting(false); showError(error.message); return; }
-     *
-     * router.push(`/intake?orderId=${orderId}`);
-     */
-
-    // STUB: simulate server latency, generate fake order ID
+    // ── STUB ──────────────────────────────────────────────────────────────────
+    // Replace with: const { orderIds } = await createOrderBatch({ orders, patient, payment });
+    // See file-level comment for full server action spec.
     await new Promise((r) => setTimeout(r, 1200));
-    const fakeOrderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
+    const fakeOrderIds = orders.map(
+      () => `ORD-${Date.now().toString(36).toUpperCase()}`
+    );
+    // ─────────────────────────────────────────────────────────────────────────
 
-    const params = orderToSearchParams(order);
-    params.set("orderId", fakeOrderId);
-    router.push(`/intake?${params.toString()}`);
+    router.push(buildConfirmationUrl(fakeOrderIds));
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────────────────────────────────────
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
@@ -205,19 +234,49 @@ export function CheckoutShell({ order, affiliateName }: Props) {
                 </div>
               </div>
 
+              {/* Programs being ordered — visible on mobile (sidebar hidden) */}
+              <div className="rounded-2xl border border-zinc-200 bg-white p-5 lg:hidden">
+                <p className="mb-3 text-sm font-semibold text-black">
+                  {isSingle ? "Program" : `Programs (${orders.length})`}
+                </p>
+                <div className="space-y-3">
+                  {orders.map((order, i) => {
+                    const config = MEDICINE_CONFIG[order.medicine];
+                    const { total } = calcOrderTotal(order);
+                    return (
+                      <div key={i} className="flex items-center justify-between text-sm">
+                        <span className="text-zinc-700">
+                          {config.name}{" "}
+                          <span className="text-xs text-zinc-400 capitalize">({order.purchaseType})</span>
+                        </span>
+                        <span className="font-semibold text-black">${total.toFixed(0)}</span>
+                      </div>
+                    );
+                  })}
+                  {!isSingle && (
+                    <div className="flex items-baseline justify-between border-t border-zinc-100 pt-2 text-sm">
+                      <span className="font-semibold text-zinc-600">Total</span>
+                      <span className="font-bold text-black">${grandTotal.toFixed(0)}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* What happens next */}
               <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-5">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">What happens next</p>
                 <ol className="space-y-2">
                   {[
                     "Your payment is authorized (not yet captured).",
-                    "You'll complete a short medical intake questionnaire.",
-                    `A licensed provider reviews your ${config.name} order within 24 hours.`,
+                    isSingle
+                      ? "You'll complete a short medical intake questionnaire from your portal."
+                      : `You'll complete a separate medical intake for each of your ${orders.length} programs, accessible from your patient portal.`,
+                    "A licensed provider reviews each order within 24 hours.",
                     "Once approved, payment is captured and your order ships.",
-                  ].map((step, i) => (
+                  ].map((text, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-xs text-zinc-600">
                       <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-600">{i + 1}</span>
-                      {step}
+                      {text}
                     </li>
                   ))}
                 </ol>
@@ -244,7 +303,7 @@ export function CheckoutShell({ order, affiliateName }: Props) {
                       Placing order…
                     </>
                   ) : (
-                    `Place order — $${total.toFixed(0)} →`
+                    `Place order — $${grandTotal.toFixed(0)} →`
                   )}
                 </button>
               </div>
@@ -261,7 +320,7 @@ export function CheckoutShell({ order, affiliateName }: Props) {
         {/* Right: sticky summary */}
         <div className="hidden lg:block">
           <div className="sticky top-24">
-            <OrderReviewPanel order={order} affiliateName={affiliateName} />
+            <OrderReviewPanel orders={orders} affiliateName={affiliateName} />
           </div>
         </div>
       </div>

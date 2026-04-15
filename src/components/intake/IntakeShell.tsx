@@ -8,10 +8,16 @@
  *
  * DATABASE STUB: On final submit, replace handleSubmit with a server action that:
  *   1. Encrypts PII fields before writing to DB
- *   2. Inserts an `intake_submissions` row
- *   3. Updates order status: "pending_intake" → "pending_review"
+ *   2. Inserts an `intake_submissions` row linked to the order
+ *   3. Updates orders.status: "pending_intake" → "pending_review"
  *   4. Triggers provider notification + patient confirmation email
- *   5. Redirects to /intake/complete
+ *   5. Redirects to /portal/dashboard
+ *
+ * ROUTING NOTE: After submission the patient is sent to their portal dashboard,
+ * NOT to /intake/complete. The portal shows any remaining pending intake cards
+ * (for other medicines ordered in the same batch) so the patient knows exactly
+ * what's left to do. The /intake/complete page still exists for direct linking
+ * but is no longer part of the primary post-intake flow.
  */
 
 import { useState, useCallback } from "react";
@@ -132,9 +138,20 @@ export function IntakeShell({ order, orderId }: Props) {
 
   async function handleSubmit() {
     setSubmitting(true);
-    // TODO: replace with server action — see file-level comment
+
+    // TODO: replace with server action — see file-level comment.
+    // The server action should:
+    //   1. Insert the intake_submissions row (encrypted PII)
+    //   2. Update orders.status: "pending_intake" → "pending_review"
+    //   3. Trigger provider notification + patient confirmation email
     await new Promise((r) => setTimeout(r, 1500));
-    router.push(`/intake/complete?orderId=${orderId}`);
+
+    // After submission we route to the portal dashboard rather than a separate
+    // /intake/complete page. The portal's "Action required" section will have
+    // already removed this order's intake card and may show remaining intakes
+    // for other medicines ordered in the same batch — giving the patient a
+    // clear picture of what's still outstanding.
+    router.push("/portal/dashboard");
   }
 
   const isLastStep = stepIndex === totalSteps - 1;

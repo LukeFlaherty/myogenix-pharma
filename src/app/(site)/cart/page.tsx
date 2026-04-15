@@ -2,26 +2,50 @@
 
 /**
  * Cart page — /cart
+ * =================
+ * Full-page view of all cart items. ONE checkout button covers all medicines.
  *
- * Full-page view of cart items. Each item has its own Checkout button that
- * takes the user to /checkout?order=<encoded> for that specific medicine config.
+ * SINGLE ITEM:  encodes as ?order=<single> → /checkout (backward compat with PDP)
+ * MULTIPLE ITEMS: encodes as ?batch=<array> → /checkout (multi-medicine flow)
  *
- * Multi-item note: a patient should only proceed through checkout with one
- * medicine at a time. The per-item Checkout buttons enforce this naturally.
+ * The checkout page accepts both param shapes and normalises to OrderConfig[]
+ * before handing off to CheckoutShell — no branching needed here or there.
+ *
+ * After checkout, patients land on /checkout/confirmation → /portal/dashboard.
+ * The portal dashboard shows a per-medicine "Complete intake" action for each
+ * order with status "pending_intake", so every intake is reachable without
+ * the cart needing to sequence them.
  */
 
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { CartItemCard } from "@/components/cart/CartItemCard";
-import { calcOrderTotal } from "@/lib/order-params";
+import { calcOrderTotal, encodeOrder, encodeBatch } from "@/lib/order-params";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const { items, removeItem, closeDrawer, itemCount } = useCart();
+  const router = useRouter();
 
   const grandTotal = items.reduce((sum, item) => {
     const { total } = calcOrderTotal(item.config);
     return sum + total;
   }, 0);
+
+  function handleCheckout() {
+    if (items.length === 1) {
+      // Single item — use the canonical ?order= param so the checkout page
+      // and any analytics can tell this came from a single-item session.
+      const encoded = encodeOrder(items[0].config);
+      router.push(`/checkout?order=${encoded}`);
+    } else {
+      // Multiple items — encode the whole batch so one checkout session covers
+      // all medicines. The patient fills in patient info + payment once, then
+      // their portal shows individual intake forms per medicine.
+      const encoded = encodeBatch(items.map((i) => i.config));
+      router.push(`/checkout?batch=${encoded}`);
+    }
+  }
 
   // Empty state
   if (items.length === 0) {
@@ -67,15 +91,14 @@ export default function CartPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_280px]">
-        {/* Item list */}
+        {/* Item list — no per-item checkout buttons */}
         <div className="space-y-4">
           {items.map((item) => (
             <CartItemCard
               key={item.medicine}
               item={item}
               onRemove={removeItem}
-              showCheckout
-              onCheckout={closeDrawer}
+              // showCheckout intentionally omitted — checkout is unified below
             />
           ))}
 
@@ -83,7 +106,7 @@ export default function CartPage() {
             <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-4">
               <p className="text-xs font-semibold text-zinc-600">Ordering multiple programs</p>
               <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-                Each medication program requires a separate checkout and provider review. Use the Checkout button on each program card to start that order.
+                All programs are purchased together in one checkout session. After payment, your patient portal will show a separate intake questionnaire for each medicine — complete them at your own pace.
               </p>
             </div>
           )}
@@ -96,6 +119,7 @@ export default function CartPage() {
               Summary
             </p>
 
+            {/* Per-medicine line */}
             {items.map((item) => {
               const { total } = calcOrderTotal(item.config);
               return (
@@ -106,31 +130,25 @@ export default function CartPage() {
               );
             })}
 
-            {items.length > 1 && (
-              <>
-                <div className="my-3 border-t border-zinc-200" />
-                <div className="flex justify-between text-sm">
-                  <span className="font-semibold text-zinc-600">Combined total</span>
-                  <span className="text-base font-bold text-black">${grandTotal.toFixed(0)}</span>
-                </div>
-              </>
-            )}
-
-            <div className="mt-5 space-y-2">
-              {items.length === 1 ? (
-                <CartItemCard
-                  item={items[0]}
-                  onRemove={removeItem}
-                  showCheckout
-                  onCheckout={closeDrawer}
-                  compact
-                />
-              ) : (
-                <p className="text-center text-xs text-zinc-400">
-                  Use the Checkout button on each program card above.
-                </p>
-              )}
+            {/* Grand total */}
+            <div className="my-3 border-t border-zinc-200" />
+            <div className="flex justify-between text-sm">
+              <span className="font-semibold text-zinc-600">
+                {items.length > 1 ? "Combined total" : "Total"}
+              </span>
+              <span className="text-base font-bold text-black">${grandTotal.toFixed(0)}</span>
             </div>
+
+            {/* Single checkout button for all items */}
+            <button
+              type="button"
+              onClick={handleCheckout}
+              className="mt-5 w-full rounded-2xl bg-black py-3.5 text-sm font-bold text-white transition-colors hover:bg-zinc-800"
+            >
+              {items.length > 1
+                ? `Checkout all ${items.length} programs →`
+                : "Proceed to checkout →"}
+            </button>
 
             {/* Trust items */}
             <div className="mt-5 space-y-2 border-t border-zinc-200 pt-4">

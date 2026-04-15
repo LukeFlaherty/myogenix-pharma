@@ -82,3 +82,58 @@ export function calcOrderTotal(config: OrderConfig): {
 export function orderToSearchParams(config: OrderConfig): URLSearchParams {
   return new URLSearchParams({ order: encodeOrder(config) });
 }
+
+// ─── Batch encoding (multi-medicine checkout) ─────────────────────────────────
+//
+// A "batch" is a JSON array of OrderConfig encoded exactly like a single order.
+// The checkout page normalises both ?order= (single, from PDP) and ?batch=
+// (multi, from cart) into OrderConfig[] before handing off to CheckoutShell.
+
+/**
+ * Encodes an array of OrderConfigs into a URL-safe base64 string.
+ * Used by the cart page to pass all items to /checkout in a single ?batch= param.
+ */
+export function encodeBatch(orders: OrderConfig[]): string {
+  const json = JSON.stringify(orders);
+  return btoa(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/**
+ * Decodes a ?batch= URL param back to an array of OrderConfigs.
+ * Returns null if the string is malformed or missing required fields.
+ */
+export function decodeBatch(encoded: string): OrderConfig[] | null {
+  try {
+    const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(base64);
+    const parsed = JSON.parse(json) as unknown[];
+    if (
+      !Array.isArray(parsed) ||
+      parsed.length === 0 ||
+      !parsed.every(
+        (o): o is OrderConfig =>
+          typeof o === "object" &&
+          o !== null &&
+          typeof (o as OrderConfig).medicine === "string" &&
+          typeof (o as OrderConfig).purchaseType === "string" &&
+          Array.isArray((o as OrderConfig).selections)
+      )
+    ) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Calculates the combined total across all orders in a batch.
+ * Useful for displaying the grand total at checkout and in the order summary.
+ */
+export function calcBatchTotal(orders: OrderConfig[]): number {
+  return orders.reduce((sum, order) => {
+    const { total } = calcOrderTotal(order);
+    return sum + total;
+  }, 0);
+}

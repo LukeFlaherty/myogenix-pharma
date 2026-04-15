@@ -9,6 +9,36 @@ export interface OrderConfig {
   selections: MonthDoseSelection[];
 }
 
+// ─── Order batch (one checkout session, one payment, N medicines) ─────────────
+//
+// This is the core of the multi-medicine data model. A patient can add several
+// medicines to their cart and complete a single checkout. The resulting
+// OrderBatch maps 1-to-1 with one Stripe PaymentIntent and one set of patient
+// demographics (PatientInfo). After payment each order in the batch gets its
+// own PortalOrder row and its own intake questionnaire.
+//
+// DB UPGRADE PATH
+// ───────────────
+// 1. Add an `order_batches` table:
+//      { id, patientId, stripePaymentIntentId, affiliateSlug, createdAt }
+// 2. Add an `orders` table with a `batchId` FK pointing at order_batches:
+//      { id, batchId, medicine, purchaseType, monthCount, status, ... }
+// 3. server action `createOrderBatch(batch, patient, stripeToken)`:
+//      a. Upsert the patient row
+//      b. Create the Stripe PaymentIntent for the combined total
+//      c. Insert one order_batches row → get batchId
+//      d. Insert one orders row per OrderConfig with status "pending_intake"
+//      e. Return { batchId, orderIds: string[] }
+// 4. Redirect to /checkout/confirmation?batchId=<id>&orderIds=<ids>
+// 5. Portal fetches all orders WHERE batchId = X to group them visually
+//
+// STUB: createOrderBatch is faked in CheckoutShell — generates random IDs
+// and redirects to confirmation without any real DB writes.
+
+export interface OrderBatch {
+  orders: OrderConfig[];
+}
+
 // ─── Checkout form ────────────────────────────────────────────────────────────
 
 export interface PatientInfo {

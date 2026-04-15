@@ -53,6 +53,19 @@ export interface PendingAction {
 export interface PortalOrder {
   orderId: string;
 
+  /**
+   * Groups orders that were placed together in a single checkout session.
+   * All orders in one cart checkout share the same orderGroupId.
+   *
+   * DB: This is the `order_batches.id` FK once the batches table exists.
+   * Use this to visually group orders on the portal orders page, and to
+   * determine whether a patient has OTHER orders from the same session that
+   * may also need intake completion.
+   *
+   * Undefined for orders placed before the batch checkout feature.
+   */
+  orderGroupId?: string;
+
   // Order config (mirrors OrderConfig from checkout-types)
   medicine: Medicine;
   purchaseType: PurchaseType;

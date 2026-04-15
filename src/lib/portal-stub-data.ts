@@ -39,8 +39,17 @@ export const STUB_ORDERS: PortalOrder[] = [
     updatedAt: "2026-04-06T09:00:00Z",
     intakeCompleted: true,
   },
+  // ── MULTI-MEDICINE BATCH DEMO ─────────────────────────────────────────────
+  // ORD-2604A and ORD-2604B were placed in a single checkout session
+  // (orderGroupId: "BATCH-2604"). Both start as "pending_intake" so the
+  // portal dashboard shows two "Action required" cards — one per medicine.
+  // This is the core of the multi-medicine intake UX: the patient pays once
+  // and then completes each intake separately from their portal.
+  //
+  // When DB is live: orderGroupId maps to the `order_batches.id` row.
   {
     orderId: "ORD-2604A",
+    orderGroupId: "BATCH-2604",
     medicine: "tirzepatide",
     purchaseType: "subscription",
     monthCount: 3,
@@ -55,6 +64,20 @@ export const STUB_ORDERS: PortalOrder[] = [
     updatedAt: "2026-04-10T14:30:00Z",
     intakeCompleted: false,
   },
+  {
+    orderId: "ORD-2604B",
+    orderGroupId: "BATCH-2604",
+    medicine: "wolverine",
+    purchaseType: "one-time",
+    monthCount: 1,
+    selections: [{ month: 1, mg: 5 }],
+    status: "pending_intake",
+    total: 197,
+    createdAt: "2026-04-10T14:30:00Z",
+    updatedAt: "2026-04-10T14:30:00Z",
+    intakeCompleted: false,
+  },
+  // ── END BATCH DEMO ────────────────────────────────────────────────────────
   {
     orderId: "ORD-2603B",
     medicine: "tirzepatide",
@@ -116,11 +139,14 @@ export function getPortalActions(orders: PortalOrder[]): PendingAction[] {
   for (const order of orders) {
     if (order.status === "pending_intake" && !order.intakeCompleted) {
       const encoded = encodeOrder(portalOrderToConfig(order));
+      // Capitalize the medicine name for display, e.g. "tirzepatide" → "Tirzepatide"
+      const medicineName =
+        order.medicine.charAt(0).toUpperCase() + order.medicine.slice(1);
       actions.push({
         type: "complete_intake",
         orderId: order.orderId,
-        label: "Complete your medical intake",
-        description: `Your intake questionnaire for order ${order.orderId} must be submitted before our provider team can review your order.`,
+        label: `Complete intake for ${medicineName}`,
+        description: `Your ${medicineName} intake questionnaire (order ${order.orderId}) must be submitted before our provider team can review and ship your order.`,
         href: `/intake?order=${encoded}&orderId=${order.orderId}`,
         priority: "urgent",
       });
