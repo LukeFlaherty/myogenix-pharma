@@ -14,7 +14,7 @@
 
 import { Hero } from "@/components/home/Hero";
 import { ProgramsGrid } from "@/components/home/ProgramsGrid";
-import { TrustStrip } from "@/components/home/TrustStrip";
+import { NewPeptides } from "@/components/home/NewPeptides";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { ClinicalFaq } from "@/components/sections/ClinicalFaq";
 import { LeadCapturePopup } from "@/components/popup/LeadCapturePopup";
@@ -43,7 +43,7 @@ export default async function Home() {
 
       <Hero />
       <ProgramsGrid />
-      <TrustStrip />
+      <NewPeptides />
       <HowItWorks />
       <ClinicalFaq />
     </>
