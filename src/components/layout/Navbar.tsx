@@ -10,6 +10,8 @@ import { CartIcon } from "@/components/cart/CartIcon";
 const NAV_LINKS = [
   { label: "Weight Management", href: "/weight-management" },
   { label: "Peptides", href: "/peptides" },
+  { label: "Sexual Health", href: "/sexual-health" },
+  { label: "Mens Health", href: "/mens-health" },
   { label: "How it works", href: "/#how-it-works" },
   { label: "FAQ", href: "/#faq" },
 ];

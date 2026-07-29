@@ -4,8 +4,9 @@ import Image from "next/image";
 const LINKS = {
   Programs: [
     { label: "Weight Management", href: "/weight-management" },
-    { label: "Tirzepatide", href: "/weight-management/tirzepatide" },
-    { label: "Semaglutide", href: "/weight-management/semaglutide" },
+    { label: "Peptides", href: "/peptides" },
+    { label: "Sexual Health", href: "/sexual-health" },
+    { label: "Mens Health", href: "/mens-health" },
   ],
   Company: [
     { label: "About", href: "#" },

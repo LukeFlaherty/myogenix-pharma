@@ -23,7 +23,7 @@ export default function WeightManagementPage() {
             Weight Management
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-zinc-500">
-            Two proven GLP-1 compounds. Both provider-reviewed, both configured
+            Three proven GLP-1 compounds. All provider-reviewed, all configured
             around your escalation schedule — not a flat dropdown.
           </p>
           <div className="mt-6 flex flex-wrap gap-4 text-sm text-zinc-500">

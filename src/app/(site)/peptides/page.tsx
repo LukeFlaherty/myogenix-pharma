@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 const CATEGORY_GROUPS = [
   {
     label: "Recovery & Healing",
-    medicines: ["wolverine"] as const,
+    medicines: ["wolverine", "bpc157"] as const,
   },
   {
     label: "Growth Hormone & Body Composition",
-    medicines: ["tesamorelin"] as const,
+    medicines: ["tesamorelin", "cjc1295", "sermorelin"] as const,
   },
   {
     label: "Metabolic & Fat Loss",
-    medicines: ["klow"] as const,
+    medicines: ["klow", "motsc"] as const,
   },
   {
     label: "Longevity & Anti-Aging",
-    medicines: ["glow"] as const,
+    medicines: ["glow", "epithalon", "nad", "glutathione"] as const,
   },
 ] as const;
 

@@ -16,39 +16,30 @@ interface CategoryBox {
   products: ProductCard[];
 }
 
-const TIRZ: ProductCard = {
-  name: "Tirzepatide",
-  tagline: "Dual-action GLP-1 therapy",
-  href: "/weight-management/tirzepatide",
-  image: "/products/tirzepatide.webp",
-  startingPrice: 199,
-  unit: "/mo",
-};
-
-const SEMA: ProductCard = {
-  name: "Semaglutide",
-  tagline: "Proven GLP-1 therapy",
-  href: "/weight-management/semaglutide",
-  image: "/products/semaglutide.webp",
-  startingPrice: 179,
-  unit: "/mo",
-};
-
 const CATEGORIES: CategoryBox[] = [
   {
     label: "Mens Health",
-    shopAllHref: "/weight-management/tirzepatide",
-    products: [TIRZ, TIRZ, TIRZ, TIRZ],
+    shopAllHref: "/mens-health",
+    products: [
+      { name: "Testosterone", tagline: "Provider-managed TRT", href: "/mens-health/testosterone", image: "/products/testosterone.webp", startingPrice: 149, unit: "/vial" },
+    ],
   },
   {
     label: "Weight Loss",
     shopAllHref: "/weight-management",
-    products: [TIRZ, SEMA, TIRZ, SEMA],
+    products: [
+      { name: "Tirzepatide", tagline: "Dual-action GLP-1 therapy", href: "/weight-management/tirzepatide", image: "/products/tirzepatide.webp", startingPrice: 199, unit: "/mo" },
+      { name: "Semaglutide", tagline: "Proven GLP-1 therapy", href: "/weight-management/semaglutide", image: "/products/semaglutide.webp", startingPrice: 179, unit: "/mo" },
+      { name: "Retatrutide", tagline: "Triple-action therapy", href: "/weight-management/retatrutide", image: "/products/retatrutide.webp", startingPrice: 229, unit: "/mo" },
+    ],
   },
   {
     label: "Sexual Health",
-    shopAllHref: "/weight-management/tirzepatide",
-    products: [TIRZ, TIRZ, TIRZ, TIRZ],
+    shopAllHref: "/sexual-health",
+    products: [
+      { name: "Sildenafil", tagline: "On-demand ED therapy", href: "/sexual-health/sildenafil", image: "/products/sildenafil.webp", startingPrice: 89, unit: "/dose" },
+      { name: "Tadalafil", tagline: "Long-acting ED therapy", href: "/sexual-health/tadalafil", image: "/products/tadalafil.webp", startingPrice: 99, unit: "/dose" },
+    ],
   },
   {
     label: "Peptides",
@@ -58,6 +49,13 @@ const CATEGORIES: CategoryBox[] = [
       { name: "Tesamorelin", tagline: "GH optimization", href: "/peptides/tesamorelin", image: "/products/tesamorelin.webp", startingPrice: 179, unit: "/vial" },
       { name: "Klow", tagline: "Metabolic support", href: "/peptides/klow", image: "/products/klow.webp", startingPrice: 149, unit: "/vial" },
       { name: "Glow", tagline: "Longevity & renewal", href: "/peptides/glow", image: "/products/glow.webp", startingPrice: 179, unit: "/vial" },
+      { name: "BPC-157", tagline: "Tissue & gut repair", href: "/peptides/bpc157", image: "/products/bpc157.webp", startingPrice: 129, unit: "/vial" },
+      { name: "CJC-1295", tagline: "Sustained GH release", href: "/peptides/cjc1295", image: "/products/cjc1295.webp", startingPrice: 149, unit: "/vial" },
+      { name: "Sermorelin", tagline: "Natural GH stimulation", href: "/peptides/sermorelin", image: "/products/sermorelin.webp", startingPrice: 149, unit: "/vial" },
+      { name: "MOTS-c", tagline: "Metabolic performance", href: "/peptides/motsc", image: "/products/motsc.webp", startingPrice: 159, unit: "/vial" },
+      { name: "Epithalon", tagline: "Cellular longevity", href: "/peptides/epithalon", image: "/products/epithalon.webp", startingPrice: 159, unit: "/vial" },
+      { name: "NAD+", tagline: "Cellular energy", href: "/peptides/nad", image: "/products/nad.webp", startingPrice: 179, unit: "/vial" },
+      { name: "Glutathione", tagline: "Master antioxidant", href: "/peptides/glutathione", image: "/products/glutathione.webp", startingPrice: 119, unit: "/vial" },
     ],
   },
 ];

@@ -21,11 +21,13 @@ interface Props {
 const COMPARE_HREF: Partial<Record<Medicine, string>> = {
   tirzepatide: "/weight-management/semaglutide",
   semaglutide: "/weight-management/tirzepatide",
+  retatrutide: "/weight-management/tirzepatide",
 };
 
 const COMPARE_LABEL: Partial<Record<Medicine, string>> = {
   tirzepatide: "Compare with Semaglutide →",
   semaglutide: "Compare with Tirzepatide →",
+  retatrutide: "Compare with Tirzepatide →",
 };
 
 export function Configurator({ medicine }: Props) {

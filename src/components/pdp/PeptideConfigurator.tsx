@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import type { PeptideMedicine } from "@/lib/pdp-types";
+import type { Medicine } from "@/lib/pdp-types";
 import { MEDICINE_CONFIG } from "@/lib/pdp-config";
 import { encodeOrder } from "@/lib/order-params";
 import { useCart } from "@/lib/cart-context";
@@ -11,17 +11,15 @@ import { ProductHero } from "./ProductHero";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  medicine: PeptideMedicine;
+  medicine: Exclude<Medicine, "tirzepatide" | "semaglutide" | "retatrutide">;
 }
 
 const BOTTLE_OPTIONS = [1, 2, 3] as const;
 type BottleCount = (typeof BOTTLE_OPTIONS)[number];
 
-const BOTTLE_LABEL: Record<BottleCount, string> = {
-  1: "1 vial",
-  2: "2 vials",
-  3: "3 vials",
-};
+function bottleLabel(count: BottleCount, unit: string): string {
+  return `${count} ${unit}${count > 1 ? "s" : ""}`;
+}
 
 // ~30–60 day supply per vial depending on dosing protocol
 const SUPPLY_LABEL: Record<BottleCount, string> = {
@@ -34,6 +32,7 @@ export function PeptideConfigurator({ medicine }: Props) {
   const router = useRouter();
   const { addItem } = useCart();
   const config = MEDICINE_CONFIG[medicine];
+  const unit = config.unitLabel ?? "vial";
 
   const [selectedDoseMg, setSelectedDoseMg] = useState(config.startingDose);
   const [bottleCount, setBottleCount] = useState<BottleCount>(1);
@@ -105,7 +104,7 @@ export function PeptideConfigurator({ medicine }: Props) {
             {config.doses.length > 1 && (
               <div>
                 <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                  Select vial strength
+                  Select {unit} strength
                 </p>
                 <div className="flex flex-col gap-2">
                   {config.doses.map((dose) => {
@@ -137,7 +136,7 @@ export function PeptideConfigurator({ medicine }: Props) {
                           "text-sm font-bold",
                           isSelected ? "text-white" : "text-black"
                         )}>
-                          ${dose.pricePerMonth}/vial
+                          ${dose.pricePerMonth}/{unit}
                         </span>
                       </button>
                     );
@@ -149,7 +148,7 @@ export function PeptideConfigurator({ medicine }: Props) {
             {/* Bottle quantity */}
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                How many vials?
+                How many {unit}s?
               </p>
               <div className="grid grid-cols-3 gap-2">
                 {BOTTLE_OPTIONS.map((n) => {
@@ -166,7 +165,7 @@ export function PeptideConfigurator({ medicine }: Props) {
                           : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-400"
                       )}
                     >
-                      <span className="text-sm font-bold">{BOTTLE_LABEL[n]}</span>
+                      <span className="text-sm font-bold">{bottleLabel(n, unit)}</span>
                       <span className={cn(
                         "text-[10px]",
                         isSelected ? "text-zinc-300" : "text-zinc-400"
@@ -179,7 +178,7 @@ export function PeptideConfigurator({ medicine }: Props) {
               </div>
               {bottleCount > 1 && (
                 <p className="mt-2 text-[11px] text-zinc-400">
-                  Ordering multiple vials at once ensures uninterrupted supply throughout your protocol.
+                  Ordering multiple {unit}s at once ensures uninterrupted supply throughout your protocol.
                 </p>
               )}
             </div>

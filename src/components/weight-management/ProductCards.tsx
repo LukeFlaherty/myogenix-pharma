@@ -2,9 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { MEDICINE_CONFIG } from "@/lib/pdp-config";
 
-const PRODUCT_IMAGE: Record<"tirzepatide" | "semaglutide", string> = {
+const PRODUCT_IMAGE: Record<"tirzepatide" | "semaglutide" | "retatrutide", string> = {
   tirzepatide: "/products/tirzepatide.webp",
   semaglutide: "/products/semaglutide.webp",
+  retatrutide: "/products/retatrutide.webp",
 };
 
 const PRODUCTS = [
@@ -32,11 +33,23 @@ const PRODUCTS = [
     ],
     bestFor: "First-line GLP-1 therapy with the most established clinical track record for weight and metabolic health.",
   },
+  {
+    medicine: "retatrutide" as const,
+    href: "/weight-management/retatrutide",
+    badge: "Triple-action",
+    differentiators: [
+      "Activates GIP + GLP-1 + glucagon receptors",
+      "Largest early trial weight reductions",
+      "Once-weekly injection",
+      "2–12 mg monthly range",
+    ],
+    bestFor: "Patients wanting the newest, most metabolically active compound available.",
+  },
 ];
 
 export function ProductCards() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {PRODUCTS.map((prod) => {
         const config = MEDICINE_CONFIG[prod.medicine];
         const startingPrice = Math.min(...config.doses.map((d) => d.pricePerMonth));

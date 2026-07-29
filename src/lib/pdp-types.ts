@@ -1,12 +1,31 @@
 // ─── Medicine ─────────────────────────────────────────────────────────────────
 
-export type GLP1Medicine = "tirzepatide" | "semaglutide";
+export type GLP1Medicine = "tirzepatide" | "semaglutide" | "retatrutide";
 
-export type PeptideMedicine = "wolverine" | "tesamorelin" | "klow" | "glow";
+export type PeptideMedicine =
+  | "wolverine"
+  | "tesamorelin"
+  | "klow"
+  | "glow"
+  | "bpc157"
+  | "cjc1295"
+  | "epithalon"
+  | "glutathione"
+  | "motsc"
+  | "nad"
+  | "sermorelin";
 
-export type Medicine = GLP1Medicine | PeptideMedicine;
+export type SexualHealthMedicine = "sildenafil" | "tadalafil";
 
-export type ProductCategory = "glp1" | "peptide";
+export type MensHealthMedicine = "testosterone";
+
+export type Medicine =
+  | GLP1Medicine
+  | PeptideMedicine
+  | SexualHealthMedicine
+  | MensHealthMedicine;
+
+export type ProductCategory = "glp1" | "peptide" | "sexual-health" | "mens-health";
 
 export type PurchaseType = "subscription" | "one-time";
 
@@ -48,6 +67,11 @@ export interface MedicineConfig {
    * Short blurb for use on the category landing card.
    */
   benefit: string;
+  /**
+   * Unit noun used in bottle-model copy ("vial", "dose", "bottle").
+   * Defaults to "vial" when omitted.
+   */
+  unitLabel?: string;
 }
 
 // ─── Selections ───────────────────────────────────────────────────────────────

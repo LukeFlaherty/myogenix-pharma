@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Products — Admin | MyoGenix Pharma",
 };
 
-const CATEGORY_ORDER: ProductCategory[] = ["glp1", "peptide"];
+const CATEGORY_ORDER: ProductCategory[] = ["glp1", "peptide", "sexual-health", "mens-health"];
 
 export default function AdminProductsPage() {
   const products = getAllProducts();

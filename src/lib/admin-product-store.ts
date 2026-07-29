@@ -20,7 +20,13 @@
  *   The imageKey field is stubbed here so the DB schema is forward-compatible.
  */
 
-import { MEDICINE_CONFIG, PEPTIDE_MEDICINES, GLP1_MEDICINES } from "./pdp-config";
+import {
+  MEDICINE_CONFIG,
+  PEPTIDE_MEDICINES,
+  GLP1_MEDICINES,
+  SEXUAL_HEALTH_MEDICINES,
+  MENS_HEALTH_MEDICINES,
+} from "./pdp-config";
 import type { Medicine, ProductCategory } from "./pdp-types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -58,7 +64,12 @@ export interface AdminProduct {
 
 // ─── Seed from pdp-config ─────────────────────────────────────────────────────
 
-const ALL_MEDICINES: Medicine[] = [...GLP1_MEDICINES, ...PEPTIDE_MEDICINES];
+const ALL_MEDICINES: Medicine[] = [
+  ...GLP1_MEDICINES,
+  ...PEPTIDE_MEDICINES,
+  ...SEXUAL_HEALTH_MEDICINES,
+  ...MENS_HEALTH_MEDICINES,
+];
 
 // Module-level mutable store. Keyed by medicine slug.
 export const PRODUCT_STORE: Map<Medicine, AdminProduct> = new Map(
