@@ -38,7 +38,7 @@ export function CartDrawer() {
   return (
     // Portal-like: always in the DOM, invisible when closed
     <div
-      className={`fixed inset-0 z-50 ${drawerOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+      className={`fixed inset-0 z-50 overflow-hidden ${drawerOpen ? "pointer-events-auto" : "pointer-events-none"}`}
       aria-hidden={!drawerOpen}
     >
       {/* Backdrop */}

@@ -274,14 +274,14 @@ export default async function Home() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.5)_42%,rgba(0,0,0,0.08)_100%),linear-gradient(180deg,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.52)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-red-600" />
 
-          <div className="relative mx-auto grid min-h-[500px] max-w-6xl items-end gap-5 px-4 pb-8 pt-10 sm:px-6 lg:min-h-[520px] lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pt-12">
+          <div className="relative mx-auto grid min-h-[500px] max-w-6xl items-end gap-5 overflow-hidden px-4 pb-8 pt-10 sm:px-6 lg:min-h-[520px] lg:grid-cols-[0.92fr_1.08fr] lg:overflow-visible lg:px-8 lg:pt-12">
             <div className="pb-4 text-center lg:text-left">
-              <Kicker className="text-white" style={{ "--kicker-size": "0.87rem" } as CSSProperties}>25+ years of performance</Kicker>
-              <h1 className="mx-auto mt-4 max-w-[33rem] text-[6.7rem] font-black uppercase leading-[0.8] tracking-normal sm:max-w-2xl sm:text-[5.4rem] lg:mx-0 lg:text-[7.2rem]">
+              <Kicker className="text-white [--kicker-size:0.72rem] sm:[--kicker-size:0.87rem]">25+ years of performance</Kicker>
+              <h1 className="mx-auto mt-4 max-w-[21rem] text-[4.45rem] font-black uppercase leading-[0.82] tracking-normal min-[390px]:text-[4.75rem] sm:max-w-2xl sm:text-[5.4rem] lg:mx-0 lg:text-[7.2rem]">
                 <GrungeWord tone="red">MyoGenix</GrungeWord>
                 <GrungeWord>Pharma</GrungeWord>
               </h1>
-              <p className="mx-auto mt-5 max-w-[24rem] text-[2.05rem] font-normal uppercase leading-[0.92] tracking-[0.035em] text-white sm:max-w-2xl sm:text-[2.4rem] lg:mx-0">
+              <p className="mx-auto mt-5 max-w-[21rem] text-[1.58rem] font-normal uppercase leading-[0.96] tracking-[0.02em] text-white min-[390px]:text-[1.7rem] sm:max-w-2xl sm:text-[2.4rem] lg:mx-0">
                 Concierge telehealth for TRT
                 <span className="block text-red-500">Performance care, guided by humans.</span>
               </p>
@@ -434,7 +434,7 @@ export default async function Home() {
                 src={`${ASSET_BASE}/guy-helping-1.webp`}
                 alt=""
                 fill
-                className="pointer-events-none z-0 scale-[1.15] object-contain object-right-bottom opacity-70 blur-[0.2px] lg:hidden"
+                className="pointer-events-none z-0 object-contain object-right-bottom opacity-70 blur-[0.2px] lg:hidden"
                 sizes="260px"
               />
               <div className="relative z-20 flex flex-col justify-center">
@@ -491,7 +491,7 @@ export default async function Home() {
                 src={`${ASSET_BASE}/guy-sad.webp`}
                 alt="Man considering symptoms of low testosterone"
                 fill
-                className="origin-top-left -translate-x-[20%] object-contain object-left-top drop-shadow-[0_28px_40px_rgba(0,0,0,0.85)] scale-[1.7] sm:scale-[1.6] lg:origin-center lg:translate-x-0 lg:scale-125 lg:object-left-bottom"
+                className="origin-top-left object-contain object-left-top drop-shadow-[0_28px_40px_rgba(0,0,0,0.85)] scale-[1.5] sm:scale-[1.55] lg:origin-center lg:scale-125 lg:object-left-bottom"
                 sizes="360px"
               />
             </div>
