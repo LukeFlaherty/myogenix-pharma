@@ -50,7 +50,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
   const affiliateName = affiliateSlug ? affiliateDisplayName(affiliateSlug) : null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       <CheckoutShell orders={orders} affiliateName={affiliateName} />
     </div>
   );

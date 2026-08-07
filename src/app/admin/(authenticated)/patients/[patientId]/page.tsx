@@ -9,6 +9,7 @@ import {
 } from "@/lib/admin-stub-data";
 import { ORDER_STATUS_CONFIG } from "@/lib/portal-types";
 import { IntakeViewer } from "@/components/admin/IntakeViewer";
+import { calculateAge } from "@/lib/date-utils";
 
 interface Props {
   params: Promise<{ patientId: string }>;
@@ -38,7 +39,7 @@ export default async function AdminPatientDetailPage({ params }: Props) {
   );
 
   const dob  = new Date(patient.dob);
-  const age  = Math.floor((Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+  const age  = calculateAge(dob);
   const totalSpent = orders
     .filter((o) => !["denied", "cancelled"].includes(o.status))
     .reduce((sum, o) => sum + o.total, 0);

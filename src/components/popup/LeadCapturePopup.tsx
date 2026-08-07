@@ -23,9 +23,11 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 import type { PopupConfig, PopupPhase } from "./types";
 import type { DiscountCode } from "@/lib/discount-codes";
 import { generateLeadCode } from "@/lib/discount-codes";
+import { uiFont } from "@/lib/ui-font";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -246,7 +248,7 @@ export function LeadCapturePopup({ config, affiliateSlug = null }: LeadCapturePo
     >
       {/* Backdrop — click to dismiss */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-black/80 backdrop-blur-[2px]"
         onClick={close}
         aria-label="Close popup"
       />
@@ -256,16 +258,25 @@ export function LeadCapturePopup({ config, affiliateSlug = null }: LeadCapturePo
         role="dialog"
         aria-modal="true"
         aria-labelledby="popup-heading"
-        className={`relative w-full max-w-md rounded-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative w-full max-w-[30rem] overflow-hidden border border-red-700/80 bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,0.75)] transition-all duration-300 ease-out ${
           visible ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-95 opacity-0"
         }`}
       >
+        <Image
+          src="/assets/grunge-redesign/grunge black section bg blank.png"
+          alt=""
+          fill
+          className="object-cover opacity-70"
+          sizes="480px"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(220,38,38,0.28),transparent_42%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.82))]" />
+
         {/* Close button */}
         <button
           type="button"
           onClick={close}
           aria-label="Close"
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-700"
+          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center border border-white/20 bg-black/60 text-zinc-300 transition-colors hover:border-red-500 hover:text-white"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path
@@ -277,7 +288,7 @@ export function LeadCapturePopup({ config, affiliateSlug = null }: LeadCapturePo
           </svg>
         </button>
 
-        <div className="px-7 py-8">
+        <div className="relative z-10 px-5 py-6 sm:px-7 sm:py-8">
           {phase === "submitted" && discountCode ? (
             // ── Success state ──────────────────────────────────────────────────
             <SuccessView code={discountCode} copied={copied} onCopy={copyCode} onClose={close} />
@@ -338,18 +349,26 @@ function FormView({
 }: FormViewProps) {
   return (
     <>
-      {/* Decorative accent bar */}
-      <div className="mb-5 h-1 w-12 rounded-full bg-black" />
+      <div className="mb-5 border-b border-red-700/70 pb-4 pr-10">
+        <p className={`${uiFont.className} text-[1.18rem] font-normal uppercase leading-none tracking-[0.18em] text-red-500`}>
+          MyoGenix Pharma
+        </p>
+      </div>
 
-      <h2 id="popup-heading" className="text-xl font-bold leading-snug text-black">
+      <h2
+        id="popup-heading"
+        className={`${uiFont.className} text-[2.85rem] font-normal uppercase leading-[0.9] tracking-[0.035em] text-white sm:text-[3.25rem]`}
+      >
         {heading}
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-zinc-500">{body}</p>
+      <p className={`${uiFont.className} mt-3 text-[1.35rem] font-normal uppercase leading-[1.05] tracking-[0.035em] text-zinc-300`}>
+        {body}
+      </p>
 
       <form onSubmit={onSubmit} noValidate className="mt-6 space-y-4">
         {/* Email */}
         <div>
-          <label htmlFor="popup-email" className="mb-1.5 block text-xs font-semibold text-zinc-700">
+          <label htmlFor="popup-email" className={`${uiFont.className} mb-1.5 block text-[1.05rem] font-normal uppercase tracking-[0.06em] text-zinc-300`}>
             Email address
           </label>
           <input
@@ -359,12 +378,12 @@ function FormView({
             placeholder="you@example.com"
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-sm text-black placeholder-zinc-400 outline-none transition-colors focus:border-black focus:ring-2 focus:ring-black/10 ${
-              emailError ? "border-red-400 bg-red-50" : "border-zinc-200 bg-white"
+            className={`w-full border px-4 py-3 font-[family-name:var(--font-poppins)] text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-red-500 focus:ring-2 focus:ring-red-600/20 ${
+              emailError ? "border-red-500 bg-red-950/40" : "border-white/20 bg-black/70"
             }`}
           />
           {emailError && (
-            <p className="mt-1 text-xs text-red-500" role="alert">
+            <p className="mt-1 font-[family-name:var(--font-poppins)] text-xs text-red-400" role="alert">
               {emailError}
             </p>
           )}
@@ -372,7 +391,7 @@ function FormView({
 
         {/* Phone */}
         <div>
-          <label htmlFor="popup-phone" className="mb-1.5 block text-xs font-semibold text-zinc-700">
+          <label htmlFor="popup-phone" className={`${uiFont.className} mb-1.5 block text-[1.05rem] font-normal uppercase tracking-[0.06em] text-zinc-300`}>
             Phone number
           </label>
           <input
@@ -382,12 +401,12 @@ function FormView({
             placeholder="(555) 000-0000"
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-sm text-black placeholder-zinc-400 outline-none transition-colors focus:border-black focus:ring-2 focus:ring-black/10 ${
-              phoneError ? "border-red-400 bg-red-50" : "border-zinc-200 bg-white"
+            className={`w-full border px-4 py-3 font-[family-name:var(--font-poppins)] text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-red-500 focus:ring-2 focus:ring-red-600/20 ${
+              phoneError ? "border-red-500 bg-red-950/40" : "border-white/20 bg-black/70"
             }`}
           />
           {phoneError && (
-            <p className="mt-1 text-xs text-red-500" role="alert">
+            <p className="mt-1 font-[family-name:var(--font-poppins)] text-xs text-red-400" role="alert">
               {phoneError}
             </p>
           )}
@@ -396,15 +415,18 @@ function FormView({
         <button
           type="submit"
           disabled={submitting}
-          className="mt-1 w-full rounded-2xl bg-black py-3.5 text-sm font-bold text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className={`${uiFont.className} mt-1 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-red-600 px-4 py-2 text-[1.42rem] font-normal uppercase leading-none tracking-[0.055em] text-white shadow-[0_0_24px_rgba(220,38,38,0.35)] transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60`}
         >
-          {submitting ? "Getting your code…" : "Get my discount →"}
+          {submitting ? "Getting your code..." : "Get my discount"}
+          {!submitting && (
+            <Image src="/assets/grunge-redesign/cta-arrow.svg" alt="" width={22} height={18} className="h-auto w-[22px]" />
+          )}
         </button>
       </form>
 
-      <p className="mt-4 text-center text-[11px] leading-relaxed text-zinc-400">
+      <p className="mt-4 text-center font-[family-name:var(--font-poppins)] text-[11px] leading-relaxed text-zinc-500">
         By submitting, you agree to receive marketing texts and emails from MyoGenix Pharma.
-        No spam — unsubscribe anytime.
+        No spam. Unsubscribe anytime.
       </p>
     </>
   );
@@ -423,7 +445,7 @@ function SuccessView({ code, copied, onCopy, onClose }: SuccessViewProps) {
   return (
     <div className="text-center">
       {/* Checkmark icon */}
-      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-black">
+      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border border-red-500 bg-red-600 shadow-[0_0_24px_rgba(220,38,38,0.35)]">
         <svg
           className="h-7 w-7 text-white"
           fill="none"
@@ -436,25 +458,27 @@ function SuccessView({ code, copied, onCopy, onClose }: SuccessViewProps) {
         </svg>
       </div>
 
-      <h2 id="popup-heading" className="text-xl font-bold text-black">
+      <h2 id="popup-heading" className={`${uiFont.className} text-[3rem] font-normal uppercase leading-none tracking-[0.035em] text-white`}>
         Your code is ready!
       </h2>
-      <p className="mt-1.5 text-sm text-zinc-500">{code.description}</p>
+      <p className={`${uiFont.className} mt-2 text-[1.3rem] font-normal uppercase leading-none tracking-[0.035em] text-zinc-300`}>
+        {code.description}
+      </p>
 
       {/* Code display */}
-      <div className="mt-5 flex items-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50">
-        <span className="flex-1 py-3.5 text-center font-mono text-xl font-bold tracking-widest text-black">
+      <div className="mt-5 flex items-center overflow-hidden border border-white/20 bg-black/70">
+        <span className="flex-1 py-3.5 text-center font-mono text-xl font-bold tracking-widest text-white">
           {code.code}
         </span>
         <button
           type="button"
           onClick={onCopy}
-          className="flex shrink-0 items-center gap-1.5 border-l border-zinc-200 bg-white px-4 py-3.5 text-xs font-semibold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-black"
+          className="flex shrink-0 items-center gap-1.5 border-l border-white/20 bg-white/5 px-4 py-3.5 font-[family-name:var(--font-poppins)] text-xs font-semibold text-zinc-300 transition-colors hover:bg-red-600 hover:text-white"
           aria-label="Copy discount code"
         >
           {copied ? (
             <>
-              <svg className="h-3.5 w-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+              <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
               Copied!
@@ -470,16 +494,17 @@ function SuccessView({ code, copied, onCopy, onClose }: SuccessViewProps) {
         </button>
       </div>
 
-      <p className="mt-3 text-xs text-zinc-400">
+      <p className="mt-3 font-[family-name:var(--font-poppins)] text-xs text-zinc-500">
         Apply this code at checkout. Valid for your first order only.
       </p>
 
       <button
         type="button"
         onClick={onClose}
-        className="mt-5 w-full rounded-2xl bg-black py-3.5 text-sm font-bold text-white transition-colors hover:bg-zinc-800"
+        className={`${uiFont.className} mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 bg-red-600 px-4 py-2 text-[1.42rem] font-normal uppercase leading-none tracking-[0.055em] text-white shadow-[0_0_24px_rgba(220,38,38,0.35)] transition-colors hover:bg-red-500`}
       >
-        Start shopping →
+        Start shopping
+        <Image src="/assets/grunge-redesign/cta-arrow.svg" alt="" width={22} height={18} className="h-auto w-[22px]" />
       </button>
     </div>
   );

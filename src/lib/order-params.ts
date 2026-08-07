@@ -8,7 +8,7 @@
  */
 
 import type { OrderConfig } from "./checkout-types";
-import type { Medicine, PurchaseType } from "./pdp-types";
+import type { Medicine } from "./pdp-types";
 import { MEDICINE_CONFIG } from "./pdp-config";
 
 export function encodeOrder(config: OrderConfig): string {

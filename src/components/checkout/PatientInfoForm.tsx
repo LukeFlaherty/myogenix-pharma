@@ -1,7 +1,9 @@
 "use client";
 
+import { MapPin, Truck, UserRound } from "lucide-react";
 import type { PatientInfo } from "@/lib/checkout-types";
 import { cn } from "@/lib/utils";
+import { uiFont } from "@/lib/ui-font";
 
 interface Props {
   data: PatientInfo;
@@ -26,9 +28,9 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold text-zinc-600">
+      <label className="text-xs font-semibold text-zinc-400">
         {label}
-        {required && <span className="ml-0.5 text-black">*</span>}
+        {required && <span className="ml-0.5 text-red-500">*</span>}
       </label>
       {children}
     </div>
@@ -36,14 +38,24 @@ function Field({
 }
 
 const inputCls =
-  "w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-black placeholder-zinc-400 transition-colors hover:border-zinc-400 focus:border-black focus:outline-none";
+  "w-full border border-white/15 bg-black/55 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors hover:border-white/30 focus:border-red-500 focus:outline-none";
 
 export function PatientInfoForm({ data, onChange }: Props) {
   return (
-    <div className="space-y-6">
+    <div className="grunge-panel space-y-7 border border-white/15 bg-black/72 p-5 text-white shadow-[0_22px_55px_rgba(0,0,0,0.34)] sm:p-6">
       <div>
-        <p className="mb-4 text-base font-bold text-black">Patient information</p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center border border-red-600/60 bg-red-600/10 text-red-400">
+            <UserRound className="h-4 w-4" />
+          </span>
+          <div>
+            <p className={`${uiFont.className} text-[1.8rem] uppercase leading-none tracking-[0.045em] text-white`}>
+              Patient information
+            </p>
+            <p className="text-[11px] text-zinc-500">Used for provider review and portal access.</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="First name" required>
             <input
               className={inputCls}
@@ -62,7 +74,7 @@ export function PatientInfoForm({ data, onChange }: Props) {
           </Field>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Date of birth" required>
             <input
               type="date"
@@ -85,7 +97,7 @@ export function PatientInfoForm({ data, onChange }: Props) {
           </Field>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Email" required>
             <input
               type="email"
@@ -107,8 +119,18 @@ export function PatientInfoForm({ data, onChange }: Props) {
         </div>
       </div>
 
-      <div className="border-t border-zinc-100 pt-6">
-        <p className="mb-4 text-base font-bold text-black">Shipping address</p>
+      <div className="border-t border-white/10 pt-6">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center border border-red-600/60 bg-red-600/10 text-red-400">
+            <Truck className="h-4 w-4" />
+          </span>
+          <div>
+            <p className={`${uiFont.className} text-[1.8rem] uppercase leading-none tracking-[0.045em] text-white`}>
+              Shipping address
+            </p>
+            <p className="text-[11px] text-zinc-500">Medication ships only after provider approval.</p>
+          </div>
+        </div>
 
         <div className="space-y-4">
           <Field label="Address line 1" required>
@@ -129,8 +151,8 @@ export function PatientInfoForm({ data, onChange }: Props) {
             />
           </Field>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="sm:col-span-2">
               <Field label="City" required>
                 <input
                   className={inputCls}
@@ -163,6 +185,13 @@ export function PatientInfoForm({ data, onChange }: Props) {
               onChange={(e) => onChange("zip", e.target.value)}
             />
           </Field>
+        </div>
+
+        <div className="mt-5 flex items-start gap-3 border border-red-900/70 bg-red-950/20 p-3">
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+          <p className="text-xs leading-relaxed text-zinc-400">
+            Availability and prescribing requirements vary by state. The provider review confirms eligibility before any charge is captured.
+          </p>
         </div>
       </div>
     </div>

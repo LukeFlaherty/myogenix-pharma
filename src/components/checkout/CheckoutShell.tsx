@@ -40,6 +40,8 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft, ArrowRight, Check, CreditCard, UserRound } from "lucide-react";
 import type { OrderConfig, PatientInfo, PaymentFormState } from "@/lib/checkout-types";
 import { encodeBatch, calcBatchTotal } from "@/lib/order-params";
 import { CheckoutStepper } from "./CheckoutStepper";
@@ -48,6 +50,7 @@ import { PaymentPanel } from "./PaymentPanel";
 import { OrderReviewPanel } from "./OrderReviewPanel";
 import { calcOrderTotal } from "@/lib/order-params";
 import { MEDICINE_CONFIG } from "@/lib/pdp-config";
+import { uiFont } from "@/lib/ui-font";
 
 const EMPTY_PATIENT: PatientInfo = {
   firstName: "", lastName: "", email: "", phone: "",
@@ -88,6 +91,18 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
 
   const grandTotal = calcBatchTotal(orders);
   const isSingle = orders.length === 1;
+  const patientReady = Boolean(
+    patient.firstName &&
+      patient.lastName &&
+      patient.email &&
+      patient.dob &&
+      patient.sex &&
+      patient.address1 &&
+      patient.city &&
+      patient.state &&
+      patient.zip
+  );
+  const paymentReady = Boolean(payment.cardholderName);
 
   // ── Routing helpers ──────────────────────────────────────────────────────────
 
@@ -131,46 +146,66 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
   // ─────────────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12">
-      {/* Affiliate attribution banner */}
-      {affiliateName && (
-        <div className="mb-6 flex items-center gap-2.5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-emerald-600">
-            <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" fill="currentColor" fillRule="evenodd" clipRule="evenodd" opacity=".2"/>
-            <path d="M2 8.5l3.5 3.5 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <p className="text-sm text-emerald-800">
-            Referred by <span className="font-semibold">{affiliateName}</span> — thank you for supporting our retail partners.
-          </p>
-        </div>
-      )}
+    <div className="relative overflow-hidden bg-black text-white">
+      <Image
+        src="/assets/grunge-redesign/grunge black section bg blank.png"
+        alt=""
+        fill
+        className="object-cover opacity-55"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_4%,rgba(220,38,38,0.28),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.32),rgba(0,0,0,0.94))]" />
+      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        {/* Affiliate attribution banner */}
+        {affiliateName && (
+          <div className="mb-6 flex items-center gap-2.5 border border-red-600/50 bg-red-600/10 px-4 py-3">
+            <Check className="h-4 w-4 shrink-0 text-red-400" />
+            <p className="text-sm text-zinc-300">
+              Referred by <span className="font-semibold text-white">{affiliateName}</span>. Thanks for supporting our retail partners.
+            </p>
+          </div>
+        )}
 
-      {/* Header */}
-      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-black">Checkout</h1>
-          <Link
-            href="/weight-management"
-            className="mt-1 inline-flex items-center gap-1 text-xs text-zinc-400 transition-colors hover:text-black"
-          >
-            ← Continue shopping
-          </Link>
+        {/* Header */}
+        <div className="mb-8 flex flex-col gap-5 border-b border-red-700/70 pb-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className={`${uiFont.className} text-[1.25rem] uppercase tracking-[0.24em] text-red-500`}>
+              Secure intake
+            </p>
+            <h1 className={`${uiFont.className} mt-1 text-[4rem] uppercase leading-none tracking-[0.035em] text-white sm:text-[5.5rem]`}>
+              Checkout
+            </h1>
+            <Link
+              href="/weight-management"
+              className="mt-3 inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Continue shopping
+            </Link>
+          </div>
+          <CheckoutStepper current={step} />
         </div>
-        <CheckoutStepper current={step} />
-      </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
         {/* Left: form steps */}
         <div>
           {/* Step 1: Patient info */}
           <div className={step === 1 ? "block" : "hidden"}>
             <PatientInfoForm data={patient} onChange={handlePatientChange} />
             <button
+              type="button"
               onClick={() => setStep(2)}
-              className="mt-8 w-full rounded-2xl bg-black py-4 text-sm font-bold text-white transition-colors hover:bg-zinc-800"
+              disabled={!patientReady}
+              className={`${uiFont.className} mt-6 flex w-full items-center justify-center gap-2 bg-red-600 py-3 text-[1.35rem] uppercase leading-none tracking-[0.045em] text-white transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500`}
             >
-              Continue to payment →
+              Continue to payment
+              <ArrowRight className="h-4 w-4" />
             </button>
+            {!patientReady && (
+              <p className="mt-3 text-center text-xs text-zinc-500">
+                Complete the required patient and shipping fields to continue.
+              </p>
+            )}
           </div>
 
           {/* Step 2: Payment */}
@@ -178,16 +213,21 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
             <PaymentPanel data={payment} onChange={handlePaymentChange} onDevSkip={handleDevSkip} />
             <div className="mt-8 flex gap-3">
               <button
+                type="button"
                 onClick={() => setStep(1)}
-                className="rounded-2xl border border-zinc-200 px-6 py-4 text-sm font-semibold text-black transition-colors hover:border-zinc-400"
+                className={`${uiFont.className} inline-flex items-center gap-2 border border-white/20 px-6 py-3 text-[1.2rem] uppercase leading-none tracking-[0.045em] text-zinc-300 transition-colors hover:border-white/50 hover:text-white`}
               >
-                ← Back
+                <ArrowLeft className="h-4 w-4" />
+                Back
               </button>
               <button
+                type="button"
                 onClick={() => setStep(3)}
-                className="flex-1 rounded-2xl bg-black py-4 text-sm font-bold text-white transition-colors hover:bg-zinc-800"
+                disabled={!paymentReady}
+                className={`${uiFont.className} flex flex-1 items-center justify-center gap-2 bg-red-600 py-3 text-[1.35rem] uppercase leading-none tracking-[0.045em] text-white transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500`}
               >
-                Review order →
+                Review order
+                <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -195,48 +235,58 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
           {/* Step 3: Review */}
           <div className={step === 3 ? "block" : "hidden"}>
             <div className="space-y-6">
-              <p className="text-base font-bold text-black">Review your order</p>
+              <p className={`${uiFont.className} text-[2rem] uppercase leading-none tracking-[0.045em] text-white`}>
+                Review your order
+              </p>
 
               {/* Patient summary */}
-              <div className="rounded-2xl border border-zinc-200 bg-white p-5">
+              <div className="grunge-panel border border-white/15 bg-black/72 p-5">
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-black">Patient info</p>
-                  <button onClick={() => setStep(1)} className="text-xs text-zinc-400 underline hover:text-black">Edit</button>
+                  <p className="flex items-center gap-2 text-sm font-semibold text-white">
+                    <UserRound className="h-4 w-4 text-red-400" />
+                    Patient info
+                  </p>
+                  <button type="button" onClick={() => setStep(1)} className="text-xs text-zinc-500 underline hover:text-white">Edit</button>
                 </div>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs">
-                  <span className="text-zinc-400">Name</span>
-                  <span className="font-medium text-black">{patient.firstName} {patient.lastName}</span>
-                  <span className="text-zinc-400">Email</span>
-                  <span className="font-medium text-black">{patient.email || "—"}</span>
-                  <span className="text-zinc-400">DOB</span>
-                  <span className="font-medium text-black">{patient.dob || "—"}</span>
-                  <span className="text-zinc-400">Shipping</span>
-                  <span className="font-medium text-black">
-                    {patient.address1 ? `${patient.address1}, ${patient.city}, ${patient.state} ${patient.zip}` : "—"}
+                <div className="grid grid-cols-[7rem_1fr] gap-x-6 gap-y-1.5 text-xs">
+                  <span className="text-zinc-500">Name</span>
+                  <span className="font-medium text-white">{patient.firstName} {patient.lastName}</span>
+                  <span className="text-zinc-500">Email</span>
+                  <span className="font-medium text-white">{patient.email || "-"}</span>
+                  <span className="text-zinc-500">DOB</span>
+                  <span className="font-medium text-white">{patient.dob || "-"}</span>
+                  <span className="text-zinc-500">Shipping</span>
+                  <span className="font-medium text-white">
+                    {patient.address1 ? `${patient.address1}, ${patient.city}, ${patient.state} ${patient.zip}` : "-"}
                   </span>
                 </div>
               </div>
 
               {/* Payment summary */}
-              <div className="rounded-2xl border border-zinc-200 bg-white p-5">
+              <div className="grunge-panel border border-white/15 bg-black/72 p-5">
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-black">Payment</p>
-                  <button onClick={() => setStep(2)} className="text-xs text-zinc-400 underline hover:text-black">Edit</button>
+                  <p className="flex items-center gap-2 text-sm font-semibold text-white">
+                    <CreditCard className="h-4 w-4 text-red-400" />
+                    Payment
+                  </p>
+                  <button type="button" onClick={() => setStep(2)} className="text-xs text-zinc-500 underline hover:text-white">Edit</button>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 text-base">💳</div>
+                  <div className="flex h-8 w-8 items-center justify-center border border-white/15 text-red-400">
+                    <CreditCard className="h-4 w-4" />
+                  </div>
                   <div>
-                    <p className="text-xs font-semibold text-black">
+                    <p className="text-xs font-semibold text-white">
                       {payment.cardholderName || "Cardholder"}
                     </p>
-                    <p className="text-xs text-zinc-400">•••• •••• •••• ••••</p>
+                    <p className="text-xs text-zinc-500">Authorized, capture pending provider approval</p>
                   </div>
                 </div>
               </div>
 
               {/* Programs being ordered — visible on mobile (sidebar hidden) */}
-              <div className="rounded-2xl border border-zinc-200 bg-white p-5 lg:hidden">
-                <p className="mb-3 text-sm font-semibold text-black">
+              <div className="grunge-panel border border-white/15 bg-black/72 p-5 lg:hidden">
+                <p className="mb-3 text-sm font-semibold text-white">
                   {isSingle ? "Program" : `Programs (${orders.length})`}
                 </p>
                 <div className="space-y-3">
@@ -245,26 +295,26 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
                     const { total } = calcOrderTotal(order);
                     return (
                       <div key={i} className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-700">
+                        <span className="text-zinc-300">
                           {config.name}{" "}
-                          <span className="text-xs text-zinc-400 capitalize">({order.purchaseType})</span>
+                          <span className="text-xs text-zinc-500 capitalize">({order.purchaseType})</span>
                         </span>
-                        <span className="font-semibold text-black">${total.toFixed(0)}</span>
+                        <span className="font-semibold text-white">${total.toFixed(0)}</span>
                       </div>
                     );
                   })}
                   {!isSingle && (
-                    <div className="flex items-baseline justify-between border-t border-zinc-100 pt-2 text-sm">
-                      <span className="font-semibold text-zinc-600">Total</span>
-                      <span className="font-bold text-black">${grandTotal.toFixed(0)}</span>
+                    <div className="flex items-baseline justify-between border-t border-white/10 pt-2 text-sm">
+                      <span className="font-semibold text-zinc-400">Total</span>
+                      <span className="font-bold text-white">${grandTotal.toFixed(0)}</span>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* What happens next */}
-              <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-5">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">What happens next</p>
+              <div className="border border-red-900/70 bg-red-950/20 p-5">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-red-400">What happens next</p>
                 <ol className="space-y-2">
                   {[
                     "Your payment is authorized (not yet captured).",
@@ -274,8 +324,8 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
                     "A licensed provider reviews each order within 24 hours.",
                     "Once approved, payment is captured and your order ships.",
                   ].map((text, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-zinc-600">
-                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-600">{i + 1}</span>
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-zinc-400">
+                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center bg-red-600 text-[9px] font-bold text-white">{i + 1}</span>
                       {text}
                     </li>
                   ))}
@@ -284,15 +334,18 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
 
               <div className="flex gap-3">
                 <button
+                  type="button"
                   onClick={() => setStep(2)}
-                  className="rounded-2xl border border-zinc-200 px-6 py-4 text-sm font-semibold text-black transition-colors hover:border-zinc-400"
+                  className={`${uiFont.className} inline-flex items-center gap-2 border border-white/20 px-6 py-3 text-[1.2rem] uppercase leading-none tracking-[0.045em] text-zinc-300 transition-colors hover:border-white/50 hover:text-white`}
                 >
-                  ← Back
+                  <ArrowLeft className="h-4 w-4" />
+                  Back
                 </button>
                 <button
+                  type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-black py-4 text-sm font-bold text-white transition-colors hover:bg-zinc-800 disabled:opacity-60"
+                  className={`${uiFont.className} flex flex-1 items-center justify-center gap-2 bg-red-600 py-3 text-[1.35rem] uppercase leading-none tracking-[0.045em] text-white transition-colors hover:bg-red-500 disabled:opacity-60`}
                 >
                   {submitting ? (
                     <>
@@ -300,10 +353,13 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                       </svg>
-                      Placing order…
+                      Placing order...
                     </>
                   ) : (
-                    `Place order — $${grandTotal.toFixed(0)} →`
+                    <>
+                      {`Place order $${grandTotal.toFixed(0)}`}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
                   )}
                 </button>
               </div>
@@ -323,6 +379,7 @@ export function CheckoutShell({ orders, affiliateName }: Props) {
             <OrderReviewPanel orders={orders} affiliateName={affiliateName} />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

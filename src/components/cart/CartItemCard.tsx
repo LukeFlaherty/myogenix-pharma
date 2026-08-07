@@ -1,11 +1,14 @@
 "use client";
 
+import Image from "next/image";
+import { ArrowRight, Trash2 } from "lucide-react";
 import type { CartItem } from "@/lib/cart-context";
 import type { Medicine } from "@/lib/pdp-types";
 import { calcOrderTotal } from "@/lib/order-params";
 import { MEDICINE_CONFIG } from "@/lib/pdp-config";
 import { encodeOrder } from "@/lib/order-params";
 import { useRouter } from "next/navigation";
+import { uiFont } from "@/lib/ui-font";
 
 interface Props {
   item: CartItem;
@@ -34,69 +37,85 @@ export function CartItemCard({ item, onRemove, showCheckout, onCheckout, compact
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-4">
+    <div className="grunge-panel border border-white/15 bg-black/70 p-4 text-white shadow-[0_18px_42px_rgba(0,0,0,0.34)]">
       {/* Header */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold capitalize ${MEDICINE_COLORS[item.medicine] ?? "bg-zinc-100 text-zinc-700"}`}>
+          <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] ${MEDICINE_COLORS[item.medicine] ?? "bg-zinc-800 text-zinc-300"}`}>
             {item.medicine}
           </span>
-          <span className="rounded-full border border-zinc-200 px-2.5 py-0.5 text-[11px] font-semibold capitalize text-zinc-500">
+          <span className="border border-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
             {item.config.purchaseType}
           </span>
         </div>
         <button
           type="button"
           onClick={() => onRemove(item.medicine)}
-          className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-700"
+          className="p-1.5 text-zinc-500 transition-colors hover:bg-red-600/15 hover:text-red-400"
           aria-label="Remove from cart"
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+          <Trash2 className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Medicine name */}
-      <p className="mb-2 text-sm font-bold text-black">{config.name}</p>
+      <div className="mb-3 grid grid-cols-[4.75rem_1fr] gap-3">
+        <div className="relative aspect-square border border-white/10 bg-white/[0.03]">
+          <Image
+            src={`/products/${item.medicine}.webp`}
+            alt={config.name}
+            fill
+            className="object-contain p-2 drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
+            sizes="76px"
+          />
+        </div>
+        <div>
+          <p className={`${uiFont.className} text-[1.75rem] uppercase leading-[0.9] tracking-[0.035em] text-white`}>
+            {config.name}
+          </p>
+          <p className="mt-1 font-[family-name:var(--font-poppins)] text-[11px] leading-snug text-zinc-500">
+            {item.config.monthCount} month{item.config.monthCount > 1 ? "s" : ""} configured. Provider review required before fulfillment.
+          </p>
+        </div>
+      </div>
 
       {/* Line items */}
       <div className={`space-y-1 ${compact ? "" : "mb-3"}`}>
         {lineItems.map((line, i) => (
           <div key={i} className="flex items-baseline justify-between gap-2">
             <span className="text-xs text-zinc-500">{line.label}</span>
-            <span className="shrink-0 text-xs font-semibold text-black">${line.price.toFixed(0)}</span>
+            <span className="shrink-0 text-xs font-semibold text-zinc-100">${line.price.toFixed(0)}</span>
           </div>
         ))}
         {item.config.purchaseType === "one-time" && (
           <div className="flex items-baseline justify-between gap-2">
             <span className="text-xs text-zinc-500">Provider consultation</span>
-            <span className="shrink-0 text-xs font-semibold text-black">${consultFee}</span>
+            <span className="shrink-0 text-xs font-semibold text-zinc-100">${consultFee}</span>
           </div>
         )}
         {item.config.purchaseType === "subscription" && savings > 0 && (
           <div className="flex items-baseline justify-between gap-2">
             <span className="text-xs text-zinc-500">Subscription savings</span>
-            <span className="shrink-0 text-xs font-semibold text-black">−${savings.toFixed(0)}</span>
+            <span className="shrink-0 text-xs font-semibold text-red-400">-${savings.toFixed(0)}</span>
           </div>
         )}
       </div>
 
       {/* Divider + total */}
-      <div className="my-2.5 border-t border-zinc-100" />
+      <div className="my-3 border-t border-white/10" />
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[11px] text-zinc-400">Total</p>
-          <p className="text-base font-bold text-black">${total.toFixed(0)}</p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-zinc-500">Total today</p>
+          <p className={`${uiFont.className} text-[1.8rem] uppercase leading-none text-white`}>${total.toFixed(0)}</p>
         </div>
 
         {showCheckout && (
           <button
             type="button"
             onClick={handleCheckout}
-            className="rounded-xl bg-black px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-zinc-800"
+            className={`${uiFont.className} inline-flex items-center gap-2 bg-red-600 px-4 py-2 text-[1.15rem] uppercase leading-none tracking-[0.045em] text-white transition-colors hover:bg-red-500`}
           >
-            Checkout →
+            Checkout
+            <ArrowRight className="h-3.5 w-3.5" />
           </button>
         )}
       </div>

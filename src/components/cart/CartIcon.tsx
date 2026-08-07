@@ -1,20 +1,29 @@
 "use client";
 
 import { useCart } from "@/lib/cart-context";
+import { cn } from "@/lib/utils";
 
-export function CartIcon() {
+export function CartIcon({
+  className,
+  iconClassName,
+  badgeClassName,
+}: {
+  className?: string;
+  iconClassName?: string;
+  badgeClassName?: string;
+}) {
   const { itemCount, openDrawer } = useCart();
 
   return (
     <button
       type="button"
       onClick={openDrawer}
-      className="relative flex h-9 w-9 items-center justify-center rounded-xl transition-colors hover:bg-zinc-100"
+      className={cn("relative flex h-9 w-9 items-center justify-center rounded-xl transition-colors hover:bg-zinc-100", className)}
       aria-label={`Cart${itemCount > 0 ? ` (${itemCount} item${itemCount > 1 ? "s" : ""})` : ""}`}
     >
       {/* Shopping bag icon */}
       <svg
-        className="h-5 w-5 text-zinc-700"
+        className={cn("h-5 w-5 text-zinc-700", iconClassName)}
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -29,7 +38,7 @@ export function CartIcon() {
 
       {/* Badge */}
       {itemCount > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white">
+        <span className={cn("absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white", badgeClassName)}>
           {itemCount}
         </span>
       )}

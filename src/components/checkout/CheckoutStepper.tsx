@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { uiFont } from "@/lib/ui-font";
 
 interface Props {
   current: 1 | 2 | 3;
@@ -12,7 +13,7 @@ const STEPS = [
 
 export function CheckoutStepper({ current }: Props) {
   return (
-    <div className="flex items-center gap-0">
+    <div className="flex flex-wrap items-center gap-y-2">
       {STEPS.map((step, i) => {
         const done = step.n < current;
         const active = step.n === current;
@@ -21,12 +22,12 @@ export function CheckoutStepper({ current }: Props) {
             <div className="flex items-center gap-2">
               <div
                 className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold transition-colors",
+                  "flex h-7 w-7 items-center justify-center border text-[11px] font-bold transition-colors",
                   done
-                    ? "bg-black text-white"
+                    ? "border-red-600 bg-red-600 text-white"
                     : active
-                    ? "border-2 border-black bg-white text-black"
-                    : "border-2 border-zinc-200 bg-white text-zinc-300"
+                    ? "border-red-500 bg-black text-white"
+                    : "border-white/15 bg-black/50 text-zinc-500"
                 )}
               >
                 {done ? (
@@ -39,15 +40,16 @@ export function CheckoutStepper({ current }: Props) {
               </div>
               <span
                 className={cn(
-                  "text-xs font-semibold",
-                  active ? "text-black" : done ? "text-zinc-500" : "text-zinc-300"
+                  uiFont.className,
+                  "text-[1.12rem] uppercase leading-none tracking-[0.045em]",
+                  active ? "text-white" : done ? "text-zinc-300" : "text-zinc-600"
                 )}
               >
                 {step.label}
               </span>
             </div>
             {i < STEPS.length - 1 && (
-              <div className={cn("mx-3 h-px w-8", done ? "bg-black" : "bg-zinc-200")} />
+              <div className={cn("mx-3 h-px w-8", done ? "bg-red-600" : "bg-white/15")} />
             )}
           </div>
         );

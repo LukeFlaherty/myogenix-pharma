@@ -5,7 +5,6 @@ import {
   STUB_AUDIT_LOG,
   getPatientById,
 } from "@/lib/admin-stub-data";
-import { ORDER_STATUS_CONFIG } from "@/lib/portal-types";
 import { AUDIT_ACTION_LABELS } from "@/lib/admin-types";
 
 export const metadata: Metadata = {

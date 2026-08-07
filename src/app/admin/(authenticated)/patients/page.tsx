@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STUB_PATIENTS, STUB_ALL_ORDERS } from "@/lib/admin-stub-data";
 import { ORDER_STATUS_CONFIG } from "@/lib/portal-types";
+import { calculateAge } from "@/lib/date-utils";
 
 export const metadata: Metadata = {
   title: "Patients — Admin | MyoGenix Pharma",
@@ -30,9 +31,7 @@ export default function AdminPatientsPage() {
             month: "short", year: "numeric",
           });
           const dob = new Date(patient.dob);
-          const age = Math.floor(
-            (Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
-          );
+          const age = calculateAge(dob);
 
           return (
             <Link

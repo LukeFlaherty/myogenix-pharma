@@ -32,7 +32,7 @@
  *   }
  */
 
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 interface AffiliateBannerProps {
   /** Raw affiliate slug from the cookie, e.g. "jakesvitamin". */
@@ -43,36 +43,41 @@ interface AffiliateBannerProps {
 
 /** sessionStorage key prefix — suffixed with slug so multi-affiliate tabs work. */
 const SESSION_KEY_PREFIX = "myogenix_affiliate_banner_dismissed_";
+const STORE_EVENT = "myogenix-affiliate-banner-storage";
+
+function getDismissedSnapshot(slug: string) {
+  if (typeof window === "undefined") return false;
+
+  try {
+    return sessionStorage.getItem(`${SESSION_KEY_PREFIX}${slug}`) === "1";
+  } catch {
+    return false;
+  }
+}
 
 export function AffiliateBanner({ slug, displayName }: AffiliateBannerProps) {
-  // Start as not-dismissed so the server-rendered HTML (which shows the banner)
-  // matches the initial client render — preventing a React hydration mismatch.
-  const [mounted, setMounted] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const subscribe = useCallback((onStoreChange: () => void) => {
+    window.addEventListener(STORE_EVENT, onStoreChange);
+    window.addEventListener("storage", onStoreChange);
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      if (sessionStorage.getItem(`${SESSION_KEY_PREFIX}${slug}`)) {
-        setDismissed(true);
-      }
-    } catch {
-      // sessionStorage unavailable (e.g., private browsing in some browsers)
-    }
-  }, [slug]);
+    return () => {
+      window.removeEventListener(STORE_EVENT, onStoreChange);
+      window.removeEventListener("storage", onStoreChange);
+    };
+  }, []);
 
-  function dismiss() {
-    setDismissed(true);
+  const dismissed = useSyncExternalStore(subscribe, () => getDismissedSnapshot(slug), () => false);
+
+  const dismiss = useCallback(() => {
     try {
       sessionStorage.setItem(`${SESSION_KEY_PREFIX}${slug}`, "1");
     } catch {
-      // sessionStorage unavailable — dismiss is still applied for this render
+      // sessionStorage unavailable — dismiss is still applied for this tab.
     }
-  }
+    window.dispatchEvent(new Event(STORE_EVENT));
+  }, [slug]);
 
-  // While not mounted (SSR / initial paint), render the banner so there's no
-  // layout shift. After mount, hide if already dismissed in this session.
-  if (mounted && dismissed) return null;
+  if (dismissed) return null;
 
   return (
     <div

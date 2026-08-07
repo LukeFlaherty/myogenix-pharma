@@ -9,10 +9,11 @@ import {
   getAuditLogByOrder,
 } from "@/lib/admin-stub-data";
 import { ORDER_STATUS_CONFIG } from "@/lib/portal-types";
-import { AUDIT_ACTION_LABELS, ADMIN_ROLE_CONFIG } from "@/lib/admin-types";
+import { AUDIT_ACTION_LABELS } from "@/lib/admin-types";
 import { IntakeViewer } from "@/components/admin/IntakeViewer";
 import { OrderActionPanel } from "@/components/admin/OrderActionPanel";
 import { getAdminSession } from "@/lib/admin-auth";
+import { calculateAge } from "@/lib/date-utils";
 
 interface Props {
   params: Promise<{ orderId: string }>;
@@ -42,9 +43,7 @@ export default async function AdminOrderDetailPage({ params }: Props) {
   });
 
   const dob = patient?.dob ? new Date(patient.dob) : null;
-  const age = dob
-    ? Math.floor((Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25))
-    : null;
+  const age = dob ? calculateAge(dob) : null;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
