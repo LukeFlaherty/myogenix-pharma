@@ -277,7 +277,7 @@ export default async function Home() {
           <div className="relative mx-auto grid min-h-[500px] max-w-6xl items-end gap-5 overflow-hidden px-4 pb-8 pt-10 sm:px-6 lg:min-h-[520px] lg:grid-cols-[0.92fr_1.08fr] lg:overflow-visible lg:px-8 lg:pt-12">
             <div className="pb-4 text-center lg:text-left">
               <Kicker className="text-white [--kicker-size:0.72rem] sm:[--kicker-size:0.87rem]">25+ years of performance</Kicker>
-              <h1 className="mx-auto mt-4 max-w-[21rem] text-[4.45rem] font-black uppercase leading-[0.82] tracking-normal min-[390px]:text-[4.75rem] sm:max-w-2xl sm:text-[5.4rem] lg:mx-0 lg:text-[7.2rem]">
+              <h1 className="mx-auto mt-4 max-w-[calc(100vw-2rem)] text-[clamp(4.1rem,19.6vw,5.35rem)] font-black uppercase leading-[0.82] tracking-normal min-[360px]:text-[clamp(4.45rem,20.5vw,5.35rem)] sm:max-w-2xl sm:text-[5.4rem] lg:mx-0 lg:text-[7.2rem]">
                 <GrungeWord tone="red">MyoGenix</GrungeWord>
                 <GrungeWord>Pharma</GrungeWord>
               </h1>
