@@ -12,7 +12,7 @@ const OPTIONS = [
 
 export function SupportOptionsCard({
   className = "",
-  ctaHref = "#faq",
+  ctaHref = "/contact",
   ctaLabel = "Ask a question",
 }: {
   className?: string;

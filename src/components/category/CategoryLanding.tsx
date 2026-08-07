@@ -88,7 +88,7 @@ export function CategoryLanding({
               <PdpButton href={heroCtaHref} className="w-full max-w-[20rem] px-5 sm:w-auto sm:min-w-[16rem] sm:max-w-none">
                 {PDP_COPY.primaryCta}
               </PdpButton>
-              <PdpButton href="#category-faq" variant="dark" className="w-full max-w-[20rem] px-5 sm:w-auto sm:min-w-[13rem] sm:max-w-none">
+              <PdpButton href="/contact" variant="dark" className="w-full max-w-[20rem] px-5 sm:w-auto sm:min-w-[13rem] sm:max-w-none">
                 {PDP_COPY.secondaryCta}
               </PdpButton>
             </div>
@@ -261,7 +261,7 @@ export function CategoryLanding({
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <PdpButton href={heroCtaHref}>{PDP_COPY.primaryCta}</PdpButton>
-            <PdpButton href="#category-faq" variant="dark">{PDP_COPY.secondaryCta}</PdpButton>
+            <PdpButton href="/contact" variant="dark">{PDP_COPY.secondaryCta}</PdpButton>
           </div>
         </div>
       </section>

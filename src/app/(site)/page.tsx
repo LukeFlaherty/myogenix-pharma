@@ -292,7 +292,7 @@ export default async function Home() {
                 >
                   Start your evaluation
                 </GrungeButton>
-                <GrungeButton href="#faq" variant="dark" className="w-full max-w-[22rem] sm:w-auto sm:max-w-none">
+                <GrungeButton href="/contact" variant="dark" className="w-full max-w-[22rem] sm:w-auto sm:max-w-none">
                   Ask a question
                 </GrungeButton>
               </div>
@@ -599,7 +599,7 @@ export default async function Home() {
                 <GrungeWord tone="red">Answered.</GrungeWord>
               </h2>
               <div className="mt-6">
-                <GrungeButton href="/mens-health/testosterone" variant="dark">Ask a question</GrungeButton>
+                <GrungeButton href="/contact" variant="dark">Ask a question</GrungeButton>
               </div>
             </div>
             <div className="grid gap-3">
@@ -642,7 +642,7 @@ export default async function Home() {
             </h2>
             <div className="flex flex-col gap-3 justify-self-stretch">
               <GrungeButton href="/mens-health/testosterone">Start your evaluation</GrungeButton>
-              <GrungeButton href="#faq" variant="dark">Ask a question</GrungeButton>
+              <GrungeButton href="/contact" variant="dark">Ask a question</GrungeButton>
             </div>
           </div>
         </section>

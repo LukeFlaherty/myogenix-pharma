@@ -120,7 +120,7 @@ export function PeptideConfigurator({ medicine }: Props) {
               <PdpButton onClick={handleCheckout} className="w-full max-w-[23rem] sm:w-auto sm:max-w-none">
                 {PDP_COPY.primaryCta}
               </PdpButton>
-              <PdpButton href="#faq" variant="dark" className="w-full max-w-[23rem] sm:w-auto sm:max-w-none">
+              <PdpButton href="/contact" variant="dark" className="w-full max-w-[23rem] sm:w-auto sm:max-w-none">
                 {PDP_COPY.secondaryCta}
               </PdpButton>
             </div>
@@ -407,7 +407,7 @@ export function PeptideConfigurator({ medicine }: Props) {
             ))}
             <div className="grid gap-3 border-t border-red-700/70 pt-5 sm:grid-cols-2">
               <PdpButton onClick={handleCheckout}>{PDP_COPY.primaryCta}</PdpButton>
-              <PdpButton href="#faq" variant="dark">{PDP_COPY.secondaryCta}</PdpButton>
+              <PdpButton href="/contact" variant="dark">{PDP_COPY.secondaryCta}</PdpButton>
             </div>
             <p className="text-center font-[family-name:var(--font-poppins)] text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-zinc-500">
               {PDP_COPY.disclaimer}
