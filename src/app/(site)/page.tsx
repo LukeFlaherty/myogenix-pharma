@@ -8,7 +8,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Headphones } from "lucide-react";
 import { Oswald } from "next/font/google";
 import type { CSSProperties } from "react";
 import { SupportOptionsCard } from "@/components/grunge/SupportOptionsCard";
@@ -233,7 +232,15 @@ function CheckLine({
 
 function TrustIcon({ icon }: { icon: string }) {
   if (icon === "headphones") {
-    return <Headphones aria-hidden className="mx-auto h-20 w-20 text-white sm:h-14 sm:w-14 lg:h-[4.2rem] lg:w-[4.2rem]" strokeWidth={1.7} />;
+    return (
+      <Image
+        src={`${ASSET_BASE}/headphones.svg`}
+        alt=""
+        width={82}
+        height={82}
+        className="mx-auto -mt-3 h-20 w-20 object-contain opacity-95 sm:-mt-2 sm:h-14 sm:w-14 lg:h-[4.2rem] lg:w-[4.2rem]"
+      />
+    );
   }
 
   return (
@@ -381,8 +388,8 @@ export default async function Home() {
                             : step.number === "3"
                               ? "scale-110 sm:scale-[0.94]"
                               : step.number === "4"
-                                ? "scale-[1.75] sm:scale-[1.5]"
-                                : "scale-[1.45] sm:scale-[1.22]"
+                                ? "scale-[1.32] sm:scale-[1.18]"
+                                : "scale-[1.9] sm:scale-[1.22]"
                       }`}
                       sizes="112px"
                     />
@@ -397,7 +404,7 @@ export default async function Home() {
 
         <section className="relative z-20 overflow-visible border-t border-red-700/70 bg-black text-white">
           <Image
-            src={`${ASSET_BASE}/concierge health for trt section bg full.png`}
+            src={`${ASSET_BASE}/bg-genetic-wire.webp`}
             alt=""
             fill
             className="object-cover opacity-95"
@@ -418,7 +425,7 @@ export default async function Home() {
                 alt="TRT bottles"
                 width={246}
                 height={246}
-                className="relative z-20 mt-4 hidden h-auto w-[15.4rem] object-contain opacity-75 lg:block"
+                className="relative z-20 mt-4 hidden h-auto w-[15.4rem] object-contain opacity-75 lg:absolute lg:bottom-[-5rem] lg:left-4 lg:mt-0 lg:block lg:w-[18.5rem]"
               />
             </div>
 
@@ -450,7 +457,7 @@ export default async function Home() {
 
               <div className="relative z-10 hidden min-h-72 overflow-visible lg:mt-0 lg:block lg:min-h-72 lg:translate-x-0">
                 <Image
-                  src={`${ASSET_BASE}/concierge health for trt section bg full.png`}
+                  src={`${ASSET_BASE}/bg-genetic-wire.webp`}
                   alt=""
                   fill
                   className="object-cover opacity-80"
@@ -479,16 +486,16 @@ export default async function Home() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.18),rgba(0,0,0,0.34)_45%,rgba(0,0,0,0.72))]" />
           <div className="relative mx-auto grid min-h-[320px] max-w-6xl grid-cols-[0.9fr_1.1fr] items-center gap-5 px-4 py-12 sm:px-6 lg:grid-cols-[0.78fr_1.02fr_0.95fr] lg:gap-5 lg:px-8">
-            <div className="relative min-h-64 lg:min-h-64">
+            <div className="pointer-events-none absolute left-0 top-10 z-0 h-64 w-56 lg:pointer-events-auto lg:relative lg:left-auto lg:top-auto lg:z-auto lg:h-auto lg:w-auto lg:min-h-64">
               <Image
                 src={`${ASSET_BASE}/guy-sad.webp`}
                 alt="Man considering symptoms of low testosterone"
                 fill
-                className="scale-[2.05] object-contain object-left-bottom drop-shadow-[0_28px_40px_rgba(0,0,0,0.85)] sm:scale-[1.85] lg:scale-125"
+                className="origin-top-left -translate-x-[20%] object-contain object-left-top drop-shadow-[0_28px_40px_rgba(0,0,0,0.85)] scale-[1.7] sm:scale-[1.6] lg:origin-center lg:translate-x-0 lg:scale-125 lg:object-left-bottom"
                 sizes="360px"
               />
             </div>
-            <div>
+            <div className="relative z-10 col-start-2 lg:col-start-auto">
               <h2 className="text-[3.65rem] font-black uppercase leading-[0.86] tracking-normal sm:text-6xl">
                 <GrungeWord>Common</GrungeWord>
                 <GrungeWord tone="red">symptoms</GrungeWord>
@@ -522,7 +529,7 @@ export default async function Home() {
 
         <section className="relative overflow-hidden border-t border-red-700/70 bg-black text-white">
           <Image
-            src={`${ASSET_BASE}/customer case section full width background.png`}
+            src={`${ASSET_BASE}/red-dots-grid-background.webp`}
             alt=""
             fill
             className="object-cover opacity-80"
@@ -573,7 +580,17 @@ export default async function Home() {
           </div>
         </SectionShell>
 
-        <SectionShell id="faq" className="py-6 sm:py-8">
+        <section id="faq" className="relative overflow-hidden border-t border-red-700/70 bg-black py-6 text-white sm:py-8">
+          <div
+            className="absolute inset-0 opacity-35"
+            style={{
+              backgroundImage: `url("${ASSET_BASE}/concrete-texture.jpg")`,
+              backgroundSize: "520px 350px",
+              backgroundPosition: "center",
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_34%,rgba(190,18,60,0.22),transparent_34%),linear-gradient(90deg,rgba(0,0,0,0.76),rgba(0,0,0,0.9)_42%,rgba(0,0,0,0.7))]" />
+          <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[0.6fr_1fr]">
             <div>
               <Kicker>FAQ</Kicker>
@@ -599,7 +616,8 @@ export default async function Home() {
               ))}
             </div>
           </div>
-        </SectionShell>
+          </div>
+        </section>
 
         <section className="relative overflow-hidden border-y border-red-700/70 bg-[#070707] text-white">
           <Image
